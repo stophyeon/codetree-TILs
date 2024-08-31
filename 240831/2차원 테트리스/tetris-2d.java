@@ -253,6 +253,7 @@ public class Main {
             if(count==4){
                 removeRed(1,i);
                 res++;
+                i++;
             }
         }
     }
@@ -265,6 +266,7 @@ public class Main {
             if(count==4){
                 removeYellow(1,i);
                 res++;
+                i++;
             }
         }
     }
