@@ -28,15 +28,22 @@ public class Main {
             for(int j=0; j<4; j++){
                 if(yellow[i][j]==true){
                     blockNum++;
+                    //System.out.print("1");
                 }
+                //else{System.out.print("0");}
             }
+            //System.out.println("");
         }
+        //System.out.println("------------");
         for(int i=0; i<4; i++){
             for(int j=2; j<6; j++){
                 if(red[i][j]==true){
                     blockNum++;
+                    //System.out.print("1");
                 }
+                //else{System.out.print("0");}
             }
+            //System.out.println("");
         }
         
         System.out.println(blockNum);
@@ -55,8 +62,12 @@ public class Main {
             }
             else{red[block[1]][loc-1]=true;}
             pointRed();
-            if(loc<=2&&loc!=-1){
-                removeRed(1,5);
+            for(int i=0; i<4; i++){
+                for(int j=0; j<2; j++){
+                    if(red[i][j]&&loc<=2&&loc!=-1){
+                        removeRed(1,5);
+                    }
+                }
             }
         }
         if(block[0]==3){
@@ -75,8 +86,12 @@ public class Main {
                 red[block[1]+1][loc-1]=true;
             }
             pointRed();
-            if(loc<=2&&loc!=-1){
-                removeRed(1,5);
+            for(int i=0; i<4; i++){
+                for(int j=0; j<2; j++){
+                    if(red[i][j]&&loc<=2&&loc!=-1){
+                        removeRed(1,5);
+                    }
+                }
             }
         }
         if(block[0]==2){
@@ -95,9 +110,14 @@ public class Main {
                 red[block[1]][loc-2]=true;
             }
             pointRed();
-            if(loc<=3&&loc!=-1){
-                removeRed(4-loc,5);
+            for(int i=0; i<4; i++){
+                for(int j=0; j<2; j++){
+                    if(red[i][j]&&loc<=3&&loc!=-1){
+                        removeRed(4-loc,5);
+                    }
+                }
             }
+            
         }
     }
 
@@ -114,8 +134,12 @@ public class Main {
             }
             else{yellow[loc-1][block[2]]=true;}
             pointYellow();
-            if(loc<=2&&loc!=-1){
-                removeYellow(1,5);
+             for(int i=0; i<4; i++){
+                for(int j=0; j<2; j++){
+                    if(yellow[i][j]&&loc<=2&&loc!=-1){
+                        removeYellow(1,5);
+                    }
+                }
             }
         }
         if(block[0]==2){
@@ -133,8 +157,12 @@ public class Main {
                 yellow[loc-1][block[2]+1]=true;
             }
             pointYellow();
-            if(loc<=2&&loc!=-1){
-                removeYellow(1,5);
+             for(int i=0; i<4; i++){
+                for(int j=0; j<2; j++){
+                    if(yellow[i][j]&&loc<=2&&loc!=-1){
+                        removeYellow(1,5);
+                    }
+                }
             }
         }
         if(block[0]==3){
@@ -152,8 +180,12 @@ public class Main {
                 yellow[loc-2][block[2]]=true;
             }
             pointYellow();
-            if(loc<=3&&loc!=-1){
-                removeYellow(4-loc,5);
+             for(int i=0; i<4; i++){
+                for(int j=0; j<2; j++){
+                    if(yellow[i][j]&&loc<=3&&loc!=-1){
+                        removeYellow(4-loc,5);
+                    }
+                }
             }
         }
     }
