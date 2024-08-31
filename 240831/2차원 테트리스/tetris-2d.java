@@ -189,7 +189,7 @@ public class Main {
             pointYellow();
              for(int i=0; i<4; i++){
                 for(int j=0; j<2; j++){
-                    if(yellow[i][j]&&loc<=3&&loc!=-1){
+                    if(yellow[j][i]&&loc<=3&&loc!=-1){
                         removeYellow(4-loc,5);
                         return;
                     }
@@ -207,7 +207,7 @@ public class Main {
         for(int i=0; i<4; i++){
             for(int j=s; j>=0; j--){
                 if(red[i][j]==true){
-                    if(j+c>=n){
+                    if(j+c>=6){
                         red[i][5]=true;
                         red[i][j]=false;
                     }
@@ -230,7 +230,7 @@ public class Main {
         for(int i=0; i<4; i++){
             for(int j=s; j>=0; j--){
                 if(yellow[j][i]==true){
-                    if(j+r>=n){
+                    if(j+r>=6){
                        yellow[5][i]=true;
                        yellow[j][i]=false; 
                     }
