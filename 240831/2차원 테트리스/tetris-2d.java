@@ -22,6 +22,8 @@ public class Main {
             moveRed(block[i]);
             moveYellow(block[i]);
         }
+        pointRed();
+        pointYellow();
         System.out.println(res);
         int blockNum=0;
         for(int i=2; i<6; i++){
