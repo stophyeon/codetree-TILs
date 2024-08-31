@@ -66,6 +66,7 @@ public class Main {
                 for(int j=0; j<2; j++){
                     if(red[i][j]&&loc<=2&&loc!=-1){
                         removeRed(1,5);
+                        return;
                     }
                 }
             }
@@ -90,6 +91,7 @@ public class Main {
                 for(int j=0; j<2; j++){
                     if(red[i][j]&&loc<=2&&loc!=-1){
                         removeRed(1,5);
+                        return;
                     }
                 }
             }
@@ -114,6 +116,7 @@ public class Main {
                 for(int j=0; j<2; j++){
                     if(red[i][j]&&loc<=3&&loc!=-1){
                         removeRed(4-loc,5);
+                        return;
                     }
                 }
             }
@@ -138,6 +141,7 @@ public class Main {
                 for(int j=0; j<2; j++){
                     if(yellow[i][j]&&loc<=2&&loc!=-1){
                         removeYellow(1,5);
+                        return;
                     }
                 }
             }
@@ -161,6 +165,7 @@ public class Main {
                 for(int j=0; j<2; j++){
                     if(yellow[i][j]&&loc<=2&&loc!=-1){
                         removeYellow(1,5);
+                        return;
                     }
                 }
             }
@@ -184,6 +189,7 @@ public class Main {
                 for(int j=0; j<2; j++){
                     if(yellow[i][j]&&loc<=3&&loc!=-1){
                         removeYellow(4-loc,5);
+                        return;
                     }
                 }
             }
