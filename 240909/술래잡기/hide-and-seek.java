@@ -1,263 +1,187 @@
-import java.util.Scanner;
-import java.util.ArrayList;
-
-class Pair {
-    int x, y;
-    
-    public Pair(int x, int y) {
-        this.x = x;
-        this.y = y;
+import java.util.*;
+import java.io.*;
+public class Main {                                     
+    static int n;
+    static int m;
+    static int h;
+    static int k;
+    static int point=0;
+    static int[][] map;
+    static int[][] location;
+    static Runner[] runners;
+    static int[] dr = {0,1,0,-1};
+    static int[] dc = {1,0,-1,0};
+    public static class Runner{
+        int r;
+        int c;
+        int dir;
+        
+        public Runner(int r,int c,int dir){
+            this.r=r;
+            this.c=c;
+            this.dir=dir;
+        }
     }
+    
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        h = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+        map= new int[n][n];
+        location= new int[k+1][3];
+        location[0] =new int[]{n/2,n/2,0};
+        runners = new Runner[m];
+        
+        for(int i=0; i<m; i++){
+            st = new StringTokenizer(br.readLine());
+            int r = Integer.parseInt(st.nextToken())-1;
+            int c = Integer.parseInt(st.nextToken())-1;
+            int d = Integer.parseInt(st.nextToken());
+            map[r][c] = 2;
+            runners[i] = new Runner(r,c,d);
+        }
+        for(int i=0; i<h; i++){
+            st = new StringTokenizer(br.readLine());
+            int x = Integer.parseInt(st.nextToken())-1;
+            int y = Integer.parseInt(st.nextToken())-1;
+            map[x][y] = 3;
+        }
 
-    public boolean isSame(Pair p) {
-        return this.x == p.x && this.y == p.y;
+        moveOne();
+        
+        for(int i=1; i<=k; i++){
+            play(i);
+        }
+       
+        System.out.println(point);
     }
-}
+    public static void play(int turn){
+        for(int i=0; i<runners.length; i++){
+            if(runners[i]==null) continue;
+            if(check(runners[i],turn)){moveRunner(runners[i]);}
+        }
+        calPoint(turn);
 
-public class Main {
-    public static final int DIR_NUM = 4;
-    public static final int MAX_N = 100;
-    
-    // 변수 선언
-    public static int n, m, h, k;
-    // 각 칸에 있는 도망자 정보를 관리합니다.
-    // 도망자의 방향만 저장하면 충분합니다.
-    public static ArrayList<Integer>[][] hiders = new ArrayList[MAX_N][MAX_N];
-    public static ArrayList<Integer>[][] nextHiders = new ArrayList[MAX_N][MAX_N];
-    public static boolean[][] tree = new boolean[MAX_N][MAX_N];
-    
-    // 정방향 기준으로
-    // 현재 위치에서 술래가 움직여야 할 방향을 관리합니다.
-    public static int[][] seekerNextDir = new int[MAX_N][MAX_N];
-    // 역방향 기준으로
-    // 현재 위치에서 술래가 움직여야 할 방향을 관리합니다.
-    public static int[][] seekerRevDir = new int[MAX_N][MAX_N];
-    
-    // 술래의 현재 위치를 나타냅니다.
-    public static Pair seekerPos;
-    // 술래가 움직이는 방향이 정방향이면 true / 아니라면 false입니다.
-    public static boolean forwardFacing = true;
-    
-    public static int ans;
-    
-    // 정중앙으로부터 끝까지 움직이는 경로를 계산해줍니다.
-    public static void initializeSeekerPath() {
-        // 상우하좌 순서대로 넣어줍니다.
-        int[] dx = new int[]{-1, 0, 1,  0};
-        int[] dy = new int[]{0 , 1, 0, -1};
-    
-        // 시작 위치와 방향, 
-        // 해당 방향으로 이동할 횟수를 설정합니다. 
-        int currX = n / 2, currY = n / 2;
-        int moveDir = 0, moveNum = 1;
-    
-        while(currX > 0 || currY > 0) {
-            // moveNum 만큼 이동합니다.
-            for(int i = 0; i < moveNum; i++) {
-                seekerNextDir[currX][currY] = moveDir;
-                currX += dx[moveDir]; currY += dy[moveDir];
-                seekerRevDir[currX][currY] = (moveDir < 2) ? (moveDir + 2) : (moveDir - 2);
-    
-                // 이동하는 도중 (0, 0)으로 오게 되면,
-                // 움직이는 것을 종료합니다.
-                if(currX == 0 && currY == 0)
-                    break;
+    }
+    public static void calPoint(int turn){
+        int count=0;
+        
+        for(int i=0; i<runners.length; i++){
+            if(runners[i]==null) continue;
+            if(inScope(runners[i],turn)&&map[runners[i].r][runners[i].c]!=3){
+                count++;
+                runners[i]=null;
+            }
+        }
+        point+=count*turn;
+    }
+    public static boolean inScope(Runner r, int turn){
+        int[] dy = new int[]{-1, 0, 1,  0};
+        int[] dx = new int[]{0 , 1, 0, -1};
+        int rscope=location[turn][0]+dy[location[turn][2]]*3;
+        int cscope=location[turn][1]+dx[location[turn][2]]*3;
+        if(location[turn][2]%2==0){
+            return r.r>=location[turn][0]&&r.r<rscope&&r.c==location[turn][1];
+        }
+        else{
+            return r.c>=location[turn][1]&&r.c<cscope&&r.r==location[turn][0];
+        }
+        
+    }
+    public static void moveOne(){
+        int[] dy = new int[]{-1, 0, 1,  0};
+        int[] dx = new int[]{0 , 1, 0, -1};
+        int[] ry = new int[]{1, 0, -1,  0};
+        int[] rx = new int[]{0, 1, 0, -1};
+        int curx = n/2;
+        int cury = n/2;
+        int revx=0;
+        int revy=0;
+        int dir = 0;
+        int redir=0;
+        int moveNum=1;
+        int moveRev=n-1;
+        for(int j=1; j<=k; j++){
+            if((k/(n*n))%2==0){
+                for(int i=1; i<=moveNum; i++){
+                    cury+=dy[dir];
+                    curx+=dx[dir];
+                }
+                dir = (dir+1)%4;
+                location[j] = new int[]{cury,curx,dir};
+                if(dir==0 || dir==2) moveNum++;
+            }
+            else{
+                for(int i=1; i<=moveRev; i++){
+                    revy+=ry[redir];
+                    revx+=rx[redir];
+                }
+                redir = (redir+1)%4;
+                location[j] = new int[]{revy,revx,redir};
+                if(redir==0 || redir==2) moveRev--;
             }
             
-            // 방향을 바꿉니다.
-            moveDir = (moveDir + 1) % 4;
-            // 만약 현재 방향이 위 혹은 아래가 된 경우에는
-            // 특정 방향으로 움직여야 할 횟수를 1 증가시킵니다.
-            if(moveDir == 0 || moveDir == 2)
-                moveNum++;
-        }
-    }
-    
-    // 격자 내에 있는지를 판단합니다.
-    public static boolean inRange(int x, int y) {
-        return 0 <= x && x < n && 0 <= y && y < n;
-    }
-    
-    public static void hiderMove(int x, int y, int moveDir) {
-        // 좌우하상 순서대로 넣어줍니다.
-        int[] dx = new int[]{0 , 0, 1, -1};
-        int[] dy = new int[]{-1, 1, 0,  0};
-    
-        int nx = x + dx[moveDir], ny = y + dy[moveDir];
-        // Step 1.
-        // 만약 격자를 벗어난다면
-        // 우선 방향을 틀어줍니다.
-        if(!inRange(nx, ny)) {
-            // 0 <-> 1 , 2 <-> 3이 되어야 합니다.
-            moveDir = (moveDir < 2) ? (1 - moveDir) : (5 - moveDir);
-            nx = x + dx[moveDir]; ny = y + dy[moveDir];
         }
         
-        // Step 2.
-        // 그 다음 위치에 술래가 없다면 움직여줍니다.
-        if(!new Pair(nx, ny).isSame(seekerPos))
-            nextHiders[nx][ny].add(moveDir);
-        // 술래가 있다면 더 움직이지 않습니다.
-        else
-            nextHiders[x][y].add(moveDir);
     }
-    
-    public static int distFromSeeker(int x, int y) {
-         // 현재 술래의 위치를 불러옵니다.
-        int seekerX = seekerPos.x;
-        int seekerY = seekerPos.y;
-    
-        return Math.abs(seekerX - x) + Math.abs(seekerY - y);
+    public static boolean inRange(int x, int y){
+        return x>=0 && x<n && y>=0 && y<n;
     }
-    
-    public static void hiderMoveAll() {
-        // Step 1. next hider를 초기화해줍니다.
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                nextHiders[i][j] = new ArrayList<>();
-        
-        // Step 2. hider를 전부 움직여줍니다.
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++) {
-                // 술래와의 거리가 3 이내인 도망자들에 대해서만
-                // 움직여줍니다.
-                if(distFromSeeker(i, j) <= 3) {
-                    for(int k = 0; k < hiders[i][j].size(); k++)
-                        hiderMove(i, j, hiders[i][j].get(k));
-                }
-                // 그렇지 않다면 현재 위치 그대로 넣어줍니다.
-                else {
-                    for(int k = 0; k < hiders[i][j].size(); k++)
-                        nextHiders[i][j].add(hiders[i][j].get(k));
-                }
+    public static boolean check(Runner r,int turn){
+        if(location[turn][0]==r.r+dr[r.dir-1] && location[turn][1]==r.c+dc[r.dir-1]){
+            return false;
+        }
+        else{
+            if(Math.abs(r.r-location[turn][0])+ Math.abs(r.c-location[turn][1])<=3){
+                return true;
             }
-    
-        // Step 3. next hider값을 옮겨줍니다.
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                hiders[i][j] = new ArrayList<>(nextHiders[i][j]);
-    }
-    
-    // 현재 술래가 바라보는 방향을 가져옵니다.
-    public static int getSeekerDir() {
-        // 현재 술래의 위치를 불러옵니다.
-        int x = seekerPos.x;
-        int y = seekerPos.y;
-    
-        // 어느 방향으로 움직여야 하는지에 대한 정보를 가져옵니다.
-        int moveDir;
-        if(forwardFacing)
-            moveDir = seekerNextDir[x][y];
-        else
-            moveDir = seekerRevDir[x][y];
-        
-        return moveDir;
-    }
-    
-    public static void checkFacing() {
-        // Case 1. 정방향으로 끝에 다다른 경우라면, 방향을 바꿔줍니다.
-        if(seekerPos.isSame(new Pair(0, 0)) && forwardFacing)
-            forwardFacing = false;
-        // Case 2. 역방향으로 끝에 다다른 경우여도, 방향을 바꿔줍니다.
-        if(seekerPos.isSame(new Pair(n / 2, n / 2)) && !forwardFacing)
-            forwardFacing = true;
-    }
-    
-    public static void seekerMove() {
-        int x = seekerPos.x;
-        int y = seekerPos.y;
-    
-        // 상우하좌 순서대로 넣어줍니다.
-        int[] dx = new int[]{-1, 0, 1,  0};
-        int[] dy = new int[]{0 , 1, 0, -1};
-    
-        int moveDir = getSeekerDir();
-    
-        // 술래를 한 칸 움직여줍니다.
-        seekerPos = new Pair(x + dx[moveDir], y + dy[moveDir]);
-        
-        // 끝에 도달했다면 방향을 바꿔줘야 합니다.
-        checkFacing();
-    }
-    
-    public static void getScore(int t) {
-        // 상우하좌 순서대로 넣어줍니다.
-        int[] dx = new int[]{-1, 0, 1,  0};
-        int[] dy = new int[]{0 , 1, 0, -1};
-    
-        // 현재 술래의 위치를 불러옵니다.
-        int x = seekerPos.x;
-        int y = seekerPos.y;
-        
-        // 술래의 방향을 불러옵니다.
-        int moveDir = getSeekerDir();
-        
-        // 3칸을 바라봅니다.
-        for(int dist = 0; dist < 3; dist++) {
-            int nx = x + dist * dx[moveDir], ny = y + dist * dy[moveDir];
             
-            // 격자를 벗어나지 않으며 나무가 없는 위치라면 
-            // 도망자들을 전부 잡게 됩니다.
-            if(inRange(nx, ny) && !tree[nx][ny]) {
-                // 해당 위치의 도망자 수 만큼 점수를 얻게 됩니다.
-                ans += t * hiders[nx][ny].size();
-    
-                // 도망자들이 사라지게 됩니다.
-                hiders[nx][ny] = new ArrayList<>();
+        }
+        return false;
+    }
+    public static void moveRunner(Runner r){
+        if(r.dir==1){
+            if(inRange(r.r+dr[0],r.c+dc[0])){
+                r.r=r.r+dr[0];
+                r.c=r.c+dc[0];
+            }
+            else{
+                r.dir=3;
+                moveRunner(r);
             }
         }
-    }
-    
-    public static void simulate(int t) {
-        // 도망자가 움직입니다.
-        hiderMoveAll();
-    
-        // 술래가 움직입니다.
-        seekerMove();
-        
-        // 점수를 얻습니다.
-        getScore(t);
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        // 입력: 
-        n = sc.nextInt();
-        m = sc.nextInt();
-        h = sc.nextInt();
-        k = sc.nextInt();
-
-        for(int i = 0; i < n; i++)
-            for(int j = 0; j < n; j++)
-                hiders[i][j] = new ArrayList<>();
-
-        // 술래 정보를 입력받습니다.
-        while(m-- > 0) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-            int d = sc.nextInt();
-            hiders[x - 1][y - 1].add(d);
+        if(r.dir==2){
+            if(inRange(r.r+dr[1],r.c+dc[1])){
+                r.r=r.r+dr[1];
+                r.c=r.c+dc[1];
+            }
+            else{
+                r.dir=4;
+                moveRunner(r);
+            }
         }
-
-        // 나무 정보를 입력받습니다.
-        while(h-- > 0) {
-            int x = sc.nextInt();
-            int y = sc.nextInt();
-            tree[x - 1][y - 1] = true;
+        if(r.dir==3){
+            if(inRange(r.r+dr[2],r.c+dc[2])){
+                r.r=r.r+dr[2];
+                r.c=r.c+dc[2];
+            }
+            else{
+                r.dir=1;
+                moveRunner(r);
+            }
         }
-
-        // 술래의 처음 위치를 설정합니다.
-        seekerPos = new Pair(n / 2, n / 2);
-
-        // 술래잡기 시작 전에
-        // 구현상의 편의를 위해
-        // 술래 경로 정보를 미리 계산합니다.
-        initializeSeekerPath();
-
-        // k번에 걸쳐 술래잡기를 진행합니다.
-        for(int t = 1; t <= k; t++)
-            simulate(t);
-        
-        System.out.print(ans);
+        if(r.dir==4){
+            if(inRange(r.r+dr[3],r.c+dc[3])){
+                r.r=r.r+dr[3];
+                r.c=r.c+dc[3];
+            }
+            else{
+                r.dir=2;
+                moveRunner(r);
+            }
+        }
     }
 }
