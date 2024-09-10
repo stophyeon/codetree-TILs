@@ -86,8 +86,8 @@ public class Main {
             }
         }
         if(count!=0){
-            System.out.println(count);
-            System.out.println(turn);
+            //System.out.println(count);
+            //System.out.println(turn);
         }
         point+=count*turn;
     }
