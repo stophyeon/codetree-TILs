@@ -32,7 +32,7 @@ public class Main {
         h = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
         map= new int[n][n];
-        location= new int[n*n*2-1][3];
+        location= new int[n*n*2-2][3];
         location[0] =new int[]{n/2,n/2,0};
         runners = new Runner[m];
         
@@ -54,16 +54,19 @@ public class Main {
         
         //for(int i=0; i<location.length; i++){
         //    System.out.print(location[i][0]);
-        //   System.out.print(" ");
+        //    System.out.print(" ");
         //    System.out.print(location[i][1]);
         //    System.out.print(" ");
         //    System.out.println(location[i][2]);
         //}
-        size = (n*n*2)-1;
+        size = (n*n*2)-2;
         for(int i=1; i<=k; i++){
             play(i);
         }
-
+        //for(int i=0; i<runners.length; i++){
+        //    if(runners[i]==null){System.out.println("cathch");}
+        //    else{System.out.print(runners[i].r);System.out.print(",");System.out.print(runners[i].c);System.out.print(",");System.out.println(runners[i].dir);}
+        //}
         System.out.println(point);
     }
 
@@ -71,7 +74,8 @@ public class Main {
         
         for(int i=0; i<runners.length; i++){
             if(runners[i]==null) continue;
-            if(check(runners[i],turn)){moveRunner(runners[i]);}
+            
+            if(check(runners[i],turn)){moveRunner(i);}
         }
         calPoint(turn);
     }
@@ -80,7 +84,9 @@ public class Main {
         int count=0;
         for(int i=0; i<runners.length; i++){
             if(runners[i]==null) continue;
+            
             if(inScope(runners[i],turn)&&map[runners[i].r][runners[i].c]!=3){
+                
                 count++;
                 runners[i]=null;
             }
@@ -96,13 +102,28 @@ public class Main {
         int turn = t%size;
         int[] dy = new int[]{-1, 0, 1,  0};
         int[] dx = new int[]{0 , 1, 0, -1};
-        int rscope=location[turn][0]+dy[location[turn][2]]*3;
-        int cscope=location[turn][1]+dx[location[turn][2]]*3;
-        if(location[turn][2]%2==0){
-            return r.r>=location[turn][0]&&r.r<rscope&&r.c==location[turn][1];
+        int rscope=location[turn][0]+dy[location[turn][2]]*2;
+        int cscope=location[turn][1]+dx[location[turn][2]]*2;
+        if(rscope<0){rscope=0;}
+        if(rscope>=n){rscope=n-1;}
+        if(cscope<0){cscope=0;}
+        if(cscope>=n){cscope=n-1;}
+        
+        if(location[turn][2]==0){
+            
+            return r.r<=location[turn][0]&&r.r>=rscope&&r.c==location[turn][1];
+        }
+        if(location[turn][2]==2){
+            
+            return r.r>=location[turn][0]&&r.r<=rscope&&r.c==location[turn][1];
+        }
+        if(location[turn][2]==1){
+            
+            return r.c>=location[turn][1]&&r.c<=cscope&&r.r==location[turn][0];
         }
         else{
-            return r.c>=location[turn][1]&&r.c<cscope&&r.r==location[turn][0];
+            
+            return r.c<=location[turn][1]&&r.c>=cscope&&r.r==location[turn][0];
         }
         
     }
@@ -113,7 +134,7 @@ public class Main {
         int cury = n/2;
         int dir = 0;
         int count=0;
-        int revcount=(n*n*2)-1;
+        int revcount=(n*n*2)-2;
         int moveNum=1;
         while(count<n*n-1){
             for(int i=1; i<=moveNum; i++){
@@ -139,33 +160,42 @@ public class Main {
         }
         location[n*n-1]=new int[]{0,0,2};
         location[n*n]=new int[]{1,0,2};
-        location[n*n*2-2]=new int[]{n/2,n/2,0};
+        location[n*n-2]=new int[]{1,0,0};
     }
     public static boolean inRange(int x, int y){
         return x>=0 && x<n && y>=0 && y<n;
     }
     public static boolean check(Runner r,int t){
-        int turn = t%size;
-        if(location[turn][0]==r.r+dr[r.dir-1] && location[turn][1]==r.c+dc[r.dir-1]){
-            return false;
-        }
-        else{
-            if(Math.abs(r.r-location[turn][0])+ Math.abs(r.c-location[turn][1])<=3){
+        int turn = (t-1)%size;
+        
+        int distance = Math.abs(r.r-location[turn][0])+Math.abs(r.c-location[turn][1]);
+        
+        if(distance<=3){
+            if(location[turn][0]==r.r+dr[r.dir-1] && location[turn][1]==r.c+dc[r.dir-1]){
+                return false;
+            }
+            else{
                 return true;
             }
-            
         }
-        return false;
+        else{
+            return false;
+        }
+            
+        
+        
     }
-    public static void moveRunner(Runner r){
+    public static void moveRunner(int i){
+        Runner r = runners[i];
         if(r.dir==1){
             if(inRange(r.r+dr[0],r.c+dc[0])){
                 r.r=r.r+dr[0];
                 r.c=r.c+dc[0];
+                
             }
             else{
                 r.dir=3;
-                moveRunner(r);
+                moveRunner(i);
             }
         }
         if(r.dir==2){
@@ -175,7 +205,7 @@ public class Main {
             }
             else{
                 r.dir=4;
-                moveRunner(r);
+                moveRunner(i);
             }
         }
         if(r.dir==3){
@@ -185,7 +215,7 @@ public class Main {
             }
             else{
                 r.dir=1;
-                moveRunner(r);
+                moveRunner(i);
             }
         }
         if(r.dir==4){
@@ -195,7 +225,7 @@ public class Main {
             }
             else{
                 r.dir=2;
-                moveRunner(r);
+                moveRunner(i);
             }
         }
     }
