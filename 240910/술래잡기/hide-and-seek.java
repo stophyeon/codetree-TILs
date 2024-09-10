@@ -6,6 +6,7 @@ public class Main {
     static int h;
     static int k;
     static int point=0;
+    static int size;
     static int[][] map;
     static int[][] location;
     static Runner[] runners;
@@ -53,18 +54,19 @@ public class Main {
         
         //for(int i=0; i<location.length; i++){
         //    System.out.print(location[i][0]);
-        //    System.out.print(" ");
+        //   System.out.print(" ");
         //    System.out.print(location[i][1]);
         //    System.out.print(" ");
         //    System.out.println(location[i][2]);
         //}
-        int size = (n*n)-1;
+        size = (n*n*2)-1;
         for(int i=1; i<=k; i++){
-            play(i%size);
+            play(i);
         }
-       
+
         System.out.println(point);
     }
+
     public static void play(int turn){
         
         for(int i=0; i<runners.length; i++){
@@ -72,11 +74,10 @@ public class Main {
             if(check(runners[i],turn)){moveRunner(runners[i]);}
         }
         calPoint(turn);
-
     }
+
     public static void calPoint(int turn){
         int count=0;
-        
         for(int i=0; i<runners.length; i++){
             if(runners[i]==null) continue;
             if(inScope(runners[i],turn)&&map[runners[i].r][runners[i].c]!=3){
@@ -84,10 +85,15 @@ public class Main {
                 runners[i]=null;
             }
         }
+        if(count!=0){
+            System.out.println(count);
+            System.out.println(turn);
+        }
         point+=count*turn;
     }
     
-    public static boolean inScope(Runner r, int turn){
+    public static boolean inScope(Runner r, int t){
+        int turn = t%size;
         int[] dy = new int[]{-1, 0, 1,  0};
         int[] dx = new int[]{0 , 1, 0, -1};
         int rscope=location[turn][0]+dy[location[turn][2]]*3;
@@ -138,7 +144,8 @@ public class Main {
     public static boolean inRange(int x, int y){
         return x>=0 && x<n && y>=0 && y<n;
     }
-    public static boolean check(Runner r,int turn){
+    public static boolean check(Runner r,int t){
+        int turn = t%size;
         if(location[turn][0]==r.r+dr[r.dir-1] && location[turn][1]==r.c+dc[r.dir-1]){
             return false;
         }
