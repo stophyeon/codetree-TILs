@@ -176,21 +176,21 @@ public class Main {
             }
         }
         //좌하단
-        for(int i=0; i<n/2; i++){
-            for(int j=(n/2)+1; j<n; j++){
-                left[(n/2)+1+i][j-(n/2)-1]=map[j][i];
+        for(int i=(n/2)+1; i<n; i++){
+            for(int j=0; j<n/2; j++){
+                left[(n/2)+1+j][n-1-i]=map[i][j];
             }
         }
         //우상단
         for(int i=0; i<n/2; i++){
             for(int j=(n/2)+1; j<n; j++){
-                left[i][j]=map[j-(n/2)-1][n-1-i];
+                left[j-(n/2)-1][n-1-i]=map[i][j];
             }
         }
         //우하단
         for(int i=(n/2)+1; i<n; i++){
             for(int j=(n/2)+1; j<n; j++){
-                left[i][j]=map[j][n+n/2-i];
+                left[j][n+n/2-i]=map[i][j];
             }
         }
         //십자모양 위
