@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+
 public class Main {
     static int n;
     static int m;
@@ -18,12 +19,13 @@ public class Main {
         n=Integer.parseInt(st.nextToken());
         m=Integer.parseInt(st.nextToken());
         k=Integer.parseInt(st.nextToken());
+
         map = new int[n][n];
         tail=new int[m][2];
         line= new int[n][n];
         head = new int[m][2];
-        
         int c=0;
+
         //0-빈칸,1-머리사람,2-일반인,3-꼬리사람,4-이동선
         for(int i=0; i<n; i++){
             st = new StringTokenizer(br.readLine());
@@ -49,7 +51,7 @@ public class Main {
         //라운드 진행
         for(int i=1; i<=k; i++){
             move(i);
-            getScore(i);
+            getScore(i-1);
         }
         //for(int i=0; i<m; i++){
         //    System.out.print("head : ");
@@ -161,35 +163,40 @@ public class Main {
         map[tail[k-1][0]][tail[k-1][1]]=3;
     }
     public static void getScore(int r){
-        r-=1;
         if((r/n)%4==0){
+            int round=(r%n);
             for(int i=0; i<n; i++){
-                if(map[r][i]==1 || map[r][i]==2 || map[r][i]==3){
-                    point+=calScore(r,i);
+                if(map[round][i]==1 || map[round][i]==2 || map[round][i]==3){
+                    point+=calScore(round,i);
                     break;
                 }
             }
         }
         else if((r/n)%4==1){
-            for(int i=n-1; i>=0; i++){
-                if(map[i][r]==1 || map[i][r]==2 || map[i][r]==3){
-                    point+=calScore(r,i);
+            int round=(r%n);
+            //System.out.println(r+1);
+            for(int i=n-1; i>=0; i--){
+                //System.out.println(i);
+                if(map[i][round]==1 || map[i][round]==2 || map[i][round]==3){
+                    point+=calScore(i,round);
                     break;
                 }
             }
         }
         else if((r/n)%4==2){
-            for(int i=n-1; i>=0; i++){
-                if(map[r][i]==1 || map[r][i]==2 || map[r][i]==3){
-                    point+=calScore(r,i);
+            int round=n-1-(r%n);
+            for(int i=n-1; i>=0; i--){
+                if(map[round][i]==1 || map[round][i]==2 || map[round][i]==3){
+                    point+=calScore(round,i);
                     break;
                 }
             }
         }
         else{
+            int round=n-1-(r%n);
             for(int i=0; i<n; i++){
-                if(map[i][r]==1 || map[i][r]==2 || map[i][r]==3){
-                    point+=calScore(r,i);
+                if(map[i][round]==1 || map[i][round]==2 || map[i][round]==3){
+                    point+=calScore(i,round);
                     break;
                 }
             }
@@ -197,14 +204,13 @@ public class Main {
     }
     public static int calScore(int r, int i){
         int k = line[r][i];
-         
         //System.out.println(head[k-1][0]);
         //System.out.println(r);
         //System.out.println(head[k-1][1]);
         //System.out.println(i);
         int score = Math.abs(head[k-1][0]-r)+Math.abs(head[k-1][1]-i)+1;
-        
         changeDir(k);
         return score*score;            
     }
+    
 }
