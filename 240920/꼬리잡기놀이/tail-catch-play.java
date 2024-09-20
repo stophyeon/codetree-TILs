@@ -10,6 +10,8 @@ public class Main {
     static int[][] head;
     static int[][] line;
     static int[][] tail;
+    static int[] teamNum;
+    static int[] lineNum;
     //시계방향 아래,왼,위,오른
     static int[] dr = {1,0,-1,0};
     static int[] dc = {0,-1,0,1};
@@ -27,6 +29,9 @@ public class Main {
         tail=new int[m][2];
         line= new int[n][n];
         head = new int[m][2];
+        teamNum = new int[m];
+        lineNum = new int[m];
+        Arrays.fill(lineNum,1);
         int c=0;
 
         //0-빈칸,1-머리사람,2-일반인,3-꼬리사람,4-이동선
@@ -46,6 +51,15 @@ public class Main {
             for(int k=0; k<n; k++){
                 if(map[j][k]==3){
                     tail[line[j][k]-1]=new int[]{j,k};
+                }
+            }
+        }
+        for(int l=1; l<=m; l++){
+            for(int i=0; i<n; i++){
+                for(int j=0; j<n; j++){
+                    if(line[i][j]==l && map[i][j]!=4){
+                        teamNum[l-1]+=1;
+                    }
                 }
             }
         }
@@ -69,7 +83,7 @@ public class Main {
             //   }
             //    System.out.println("");
             //}
-            //System.out.println("---------------");
+            //System.out.println("-----------");
         }
         
 
@@ -78,6 +92,10 @@ public class Main {
         //        System.out.print(line[i][j]);
         //    }
         //    System.out.println();
+        //}
+
+        //for(int i=0; i<m; i++){
+        //   System.out.println(teamNum[i]);
         //}
 
         System.out.println(point);
@@ -97,6 +115,7 @@ public class Main {
                 if(nr>=0&&nr<n&&nc>=0&&nc<n){
                     if(!visit[nr][nc] && line[nr][nc]==4){
                         line[nr][nc]=team;
+                        lineNum[team-1]+=1;
                         q.add(new int[]{nr,nc});
                         visit[nr][nc]=true;
                     }
@@ -111,37 +130,60 @@ public class Main {
             int hc=head[i][1];
             int tr=tail[i][0];
             int tc=tail[i][1];
-            //시계
-            if(hc>tc){
-                for(int j=0; j<4; j++){
-                    int nr =hr+dr[j];
-                    int nc =hc+dc[j];
-                    
-                    if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                        moveOne(i,nr,nc);
-                        break;
+            if(teamNum[i]==lineNum[i]){
+                if(hc>tc){
+                    for(int j=0; j<4; j++){
+                        int nr =hr+dr[j];
+                        int nc =hc+dc[j];
+                        if(inRange(nr,nc,i)&&map[nr][nc]==2){
+                            moveOne(i,nr,nc);
+                            break;
+                        }
                     }
                 }
-            }
-            //반시계
-            else if(hc<tc){
-                for(int j=0; j<4; j++){
-                    int nr =hr+revdr[j];
-                    int nc =hc+revdc[j];
-                    
-                    if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                        moveOneRev(i,nr,nc);
-                        break;
+                //반시계
+                else if(hc<tc){
+                    for(int j=0; j<4; j++){
+                        int nr =hr+revdr[j];
+                        int nc =hc+revdc[j];
+                        if(inRange(nr,nc,i)&&map[nr][nc]==2){
+                            moveOneRev(i,nr,nc);
+                            break;
+                        }
+                    }
+                }
+                else{
+                    //시계
+                    if(hr>tr){
+                        for(int j=0; j<4; j++){
+                            int nr =hr+dr[j];
+                            int nc =hc+dc[j];
+                        
+                            if(inRange(nr,nc,i)&&map[nr][nc]==2){
+                                moveOne(i,nr,nc);
+                                break;
+                            }
+                        }
+                    }
+                    //반시계
+                    if(hr<tr){
+                        for(int j=0; j<4; j++){
+                            int nr =hr+revdr[j];
+                            int nc =hc+revdc[j];
+                        
+                            if(inRange(nr,nc,i)&&map[nr][nc]==2){
+                                moveOneRev(i,nr,nc);
+                                break;
+                            }
+                        }
                     }
                 }
             }
             else{
-                //시계
-                if(hr>tr){
+                if(hc>tc){
                     for(int j=0; j<4; j++){
                         int nr =hr+dr[j];
                         int nc =hc+dc[j];
-                        
                         if(inRange(nr,nc,i)&&map[nr][nc]==4){
                             moveOne(i,nr,nc);
                             break;
@@ -149,14 +191,39 @@ public class Main {
                     }
                 }
                 //반시계
-                if(hr<tr){
+                else if(hc<tc){
                     for(int j=0; j<4; j++){
                         int nr =hr+revdr[j];
                         int nc =hc+revdc[j];
-                        
-                        if((inRange(nr,nc,i)&&map[nr][nc]==4) || (inRange(nr,nc,i)&&map[nr][nc]==2)){
+                        if(inRange(nr,nc,i)&&map[nr][nc]==4){
                             moveOneRev(i,nr,nc);
                             break;
+                        }
+                    }
+                }
+                else{
+                    //시계
+                    if(hr>tr){
+                        for(int j=0; j<4; j++){
+                            int nr =hr+dr[j];
+                            int nc =hc+dc[j];
+                        
+                            if(inRange(nr,nc,i)&&map[nr][nc]==4){
+                                moveOne(i,nr,nc);
+                                break;
+                            }
+                        }
+                    }
+                    //반시계
+                    if(hr<tr){
+                        for(int j=0; j<4; j++){
+                            int nr =hr+revdr[j];
+                            int nc =hc+revdc[j];
+                        
+                            if(inRange(nr,nc,i)&&map[nr][nc]==4){
+                                moveOneRev(i,nr,nc);
+                                break;
+                            }
                         }
                     }
                 }
@@ -165,72 +232,92 @@ public class Main {
     }
 
     public static void moveOne(int i,int nr,int nc){
-        int num = Math.abs(head[i][0]-tail[i][0])+Math.abs(head[i][1]-tail[i][1]);
+        int num = teamNum[i];
         boolean[][] visited = new boolean[n][n];
         head[i] = new int[]{nr,nc};
         map[nr][nc]=1;
         visited[nr][nc]=true;
-        for(int k=0; k<=num; k++){
+        
+        if(num==lineNum[i]){
+            
             for(int j=0; j<4; j++){
                 int r = nr+dr[j];
                 int c = nc+dc[j];
                 if(r<0||r>=n||c<0||c>=n){continue;}
                 if(visited[r][c]){continue;}
-                if(k==num && line[r][c]==i+1 && map[r][c]==3){map[r][c]=4;break;}
-                if(map[r][c]==2 || map[r][c]==1){
-                    if(line[r][c]==i+1){
-                        if(k==num-1){
-                            map[r][c]=3;
-                            visited[r][c]=true;
-                            nr=r;
-                            nc=c;
-                            tail[i]=new int[]{r,c};
-                        }
-                        else{
-                            map[r][c]=2;
-                            visited[r][c]=true;
-                            nr=r;
-                            nc=c;
-                        }
-                        break;
-                    }
+                if(line[r][c]!=i+1){continue;}
+                if(map[r][c]==2){
+                    visited[r][c]=true;
+                    nr=r;
+                    nc=c;
+                    j=-1;    
                 }
-            }  
+                if(map[r][c]==3){map[r][c]=2;nr=r;nc=c;j=-1;visited[r][c]=true;}
+                if(map[r][c]==1){map[r][c]=3;tail[i]=new int[]{r,c};nr=r;nc=c;j=-1;visited[r][c]=true;}
+            }
+        }
+        else{
+            for(int j=0; j<4; j++){
+                int r = nr+dr[j];
+                int c = nc+dc[j];
+                if(r<0||r>=n||c<0||c>=n){continue;}
+                if(visited[r][c]){continue;}
+                if(line[r][c]!=i+1){continue;}
+                
+                if(map[r][c]==2){
+                    visited[r][c]=true;
+                    nr=r;
+                    nc=c;
+                    j=-1;
+                }
+                if(map[r][c]==3){map[r][c]=4;map[nr][nc]=3;tail[i]=new int[]{nr,nc};break;}
+                if(map[r][c]==1){map[r][c]=2;nr=r;nc=c;visited[r][c]=true;j=-1;}  
+                
+            }
         }
     }
     
     public static void moveOneRev(int i,int nr,int nc){
-        int num = Math.abs(head[i][0]-tail[i][0])+Math.abs(head[i][1]-tail[i][1]);
+        int num = teamNum[i];
         boolean[][] visited = new boolean[n][n];
         head[i] = new int[]{nr,nc};
         map[nr][nc]=1;
         visited[nr][nc]=true;
-        for(int k=0; k<=num; k++){
+
+        if(num==lineNum[i]){
             for(int j=0; j<4; j++){
                 int r = nr+revdr[j];
                 int c = nc+revdc[j];
                 if(r<0||r>=n||c<0||c>=n){continue;}
                 if(visited[r][c]){continue;}
-                if(k==num && line[r][c]==i+1 && map[r][c]==3){map[r][c]=4;break;}
-                if(map[r][c]==2 || map[r][c]==1){
-                    if(line[r][c]==i+1){
-                        if(k==num-1){
-                            map[r][c]=3;
-                            visited[r][c]=true;
-                            nr=r;
-                            nc=c;
-                            tail[i]=new int[]{r,c};
-                        }
-                        else{
-                            map[r][c]=2;
-                            visited[r][c]=true;
-                            nr=r;
-                            nc=c;
-                        }
-                        break;
-                    }
+                if(line[r][c]!=i+1){continue;}
+                if(map[r][c]==2){
+                    visited[r][c]=true;
+                    nr=r;
+                    nc=c;
+                    j=-1;
+                    continue;    
                 }
-            }  
+                if(map[r][c]==3){map[r][c]=2;nr=r;nc=c;j=-1;visited[r][c]=true;}
+                if(map[r][c]==1){map[r][c]=3;tail[i]=new int[]{r,c};nr=r;nc=c;j=-1;visited[r][c]=true;}
+            }
+        }
+        else{
+            for(int j=0; j<4; j++){
+                int r = nr+revdr[j];
+                int c = nc+revdc[j];
+                if(r<0||r>=n||c<0||c>=n){continue;}
+                if(visited[r][c]){continue;}
+                if(line[r][c]!=i+1){continue;}
+                if(map[r][c]==3){map[r][c]=4;map[nr][nc]=3;tail[i]=new int[]{nr,nc};break;}
+                if(map[r][c]==1){map[r][c]=2;nr=r;nc=c;visited[r][c]=true;j=-1;continue;}  
+                if(map[r][c]==2){
+                    visited[r][c]=true;
+                    nr=r;
+                    nc=c;
+                    j=-1; 
+                }
+            }
         }
     }
 
@@ -255,8 +342,18 @@ public class Main {
         if((r/n)%4==0){
             int round=(r%n);
             for(int i=0; i<n; i++){
-                if(map[round][i]==1 || map[round][i]==2 || map[round][i]==3){
+                if(map[round][i]==2){
                     point+=calScore(round,i);
+                    break;
+                }
+                if(map[round][i]==1){
+                    point+=1;
+                    changeDir(line[round][i]);
+                    break;
+                }
+                if(map[round][i]==3){
+                    point+=teamNum[line[round][i]-1]*teamNum[line[round][i]-1];
+                    changeDir(line[round][i]);
                     break;
                 }
             }
@@ -264,8 +361,18 @@ public class Main {
         else if((r/n)%4==1){
             int round=(r%n);
             for(int i=n-1; i>=0; i--){
-                if(map[i][round]==1 || map[i][round]==2 || map[i][round]==3){
+                if(map[i][round]==2){
                     point+=calScore(i,round);
+                    break;
+                }
+                if(map[i][round]==1){
+                    point+=1;
+                    changeDir(line[i][round]);
+                    break;
+                }
+                if(map[i][round]==3){
+                    point+=teamNum[line[i][round]-1]*teamNum[line[i][round]-1];
+                    changeDir(line[i][round]);
                     break;
                 }
             }
@@ -273,8 +380,18 @@ public class Main {
         else if((r/n)%4==2){
             int round=n-1-(r%n);
             for(int i=n-1; i>=0; i--){
-                if(map[round][i]==1 || map[round][i]==2 || map[round][i]==3){
+                if(map[round][i]==2){
                     point+=calScore(round,i);
+                    break;
+                }
+                if(map[round][i]==1){
+                    point+=1;
+                    changeDir(line[round][i]);
+                    break;
+                }
+                if(map[round][i]==3){
+                    point+=teamNum[line[round][i]-1]*teamNum[line[round][i]-1];
+                    changeDir(line[round][i]);
                     break;
                 }
             }
@@ -282,16 +399,50 @@ public class Main {
         else{
             int round=n-1-(r%n);
             for(int i=0; i<n; i++){
-                if(map[i][round]==1 || map[i][round]==2 || map[i][round]==3){
+                if(map[i][round]==2){
                     point+=calScore(i,round);
+                    break;
+                }
+                if(map[i][round]==1){
+                    point+=1;
+                    changeDir(line[i][round]);
+                    break;
+                }
+                if(map[i][round]==3){
+                    point+=teamNum[line[i][round]-1]*teamNum[line[i][round]-1];
+                    changeDir(line[i][round]);
                     break;
                 }
             }
         }
     }
-    public static int calScore(int r, int i){
-        int k = line[r][i];
-        int score = Math.abs(head[k-1][0]-r)+Math.abs(head[k-1][1]-i)+1;
+    public static int calScore(int round, int i){
+        int k = line[round][i];
+        int score = 1;
+        int r = head[k-1][0];
+        int c = head[k-1][1];
+        boolean[][] visited = new boolean[n][n];
+        visited[r][c]=true;
+        
+        for(int l=0; l<4; l++){
+            int nr= r+dr[l];
+            int nc= c+dc[l];
+            if(nr<0||nr>=n||nc<0||nc>=n){continue;}
+            if(visited[nr][nc]){continue;}
+            if(line[nr][nc]!=k){continue;}
+            if(map[nr][nc]==3||map[nr][nc]==4){continue;}
+            
+            if(map[nr][nc]==2){
+                visited[nr][nc]=true;
+                score++;
+                r=nr;
+                c=nc;
+                l=-1;
+            }
+            if(nr==round&&nc==i){break;}
+        }
+        
+        //System.out.println(score);
         changeDir(k);
         return score*score;            
     }
