@@ -13,6 +13,9 @@ public class Main {
     //시계방향 아래,왼,위,오른
     static int[] dr = {1,0,-1,0};
     static int[] dc = {0,-1,0,1};
+    //반시계방향 왼,아래,오른,위
+    static int[] revdr = {0,1,0,-1};
+    static int[] revdc = {-1,0,1,0};
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -52,15 +55,31 @@ public class Main {
         for(int i=1; i<=k; i++){
             move(i);
             getScore(i-1);
+            //for(int k=0; k<m; k++){
+            //    System.out.print("head : ");
+            //    System.out.print(head[k][0]);
+            //    System.out.println(head[k][1]);
+            //    System.out.print("tail : ");
+            //    System.out.print(tail[k][0]);
+            //    System.out.println(tail[k][1]);
+            //}
+            //for(int j=0; j<n; j++){
+            //    for(int l=0; l<n; l++){
+            //        System.out.print(map[j][l]);
+            //   }
+            //    System.out.println("");
+            //}
+            //System.out.println("---------------");
         }
-        //for(int i=0; i<m; i++){
-        //    System.out.print("head : ");
-        //    System.out.print(head[i][0]);
-        //    System.out.println(head[i][1]);
-        //    System.out.print("tail : ");
-        //    System.out.print(tail[i][0]);
-        //   System.out.println(tail[i][1]);
+        
+
+        //for(int i=0; i<n; i++){
+        //    for(int j=0; j<n; j++){
+        //        System.out.print(line[i][j]);
+        //    }
+        //    System.out.println();
         //}
+
         System.out.println(point);
     }
     //line 팀 번호
@@ -88,21 +107,65 @@ public class Main {
 
     public static void move(int round){
         for(int i=0; i<m; i++){
-            int r=head[i][0];
-            int c=head[i][1];
-            for(int j=0; j<4; j++){
-                int nr =r+dr[j];
-                int nc =c+dc[j];
-                if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                    moveOne(i,nr,nc);
-                    break;
+            int hr=head[i][0];
+            int hc=head[i][1];
+            int tr=tail[i][0];
+            int tc=tail[i][1];
+            //시계
+            if(hc>tc){
+                for(int j=0; j<4; j++){
+                    int nr =hr+dr[j];
+                    int nc =hc+dc[j];
+                    
+                    if(inRange(nr,nc,i)&&map[nr][nc]==4){
+                        moveOne(i,nr,nc);
+                        break;
+                    }
+                }
+            }
+            //반시계
+            else if(hc<tc){
+                for(int j=0; j<4; j++){
+                    int nr =hr+revdr[j];
+                    int nc =hc+revdc[j];
+                    
+                    if(inRange(nr,nc,i)&&map[nr][nc]==4){
+                        moveOneRev(i,nr,nc);
+                        break;
+                    }
+                }
+            }
+            else{
+                //시계
+                if(hr>tr){
+                    for(int j=0; j<4; j++){
+                        int nr =hr+dr[j];
+                        int nc =hc+dc[j];
+                        
+                        if(inRange(nr,nc,i)&&map[nr][nc]==4){
+                            moveOne(i,nr,nc);
+                            break;
+                        }
+                    }
+                }
+                //반시계
+                if(hr<tr){
+                    for(int j=0; j<4; j++){
+                        int nr =hr+revdr[j];
+                        int nc =hc+revdc[j];
+                        
+                        if((inRange(nr,nc,i)&&map[nr][nc]==4) || (inRange(nr,nc,i)&&map[nr][nc]==2)){
+                            moveOneRev(i,nr,nc);
+                            break;
+                        }
+                    }
                 }
             }
         }
     }
+
     public static void moveOne(int i,int nr,int nc){
         int num = Math.abs(head[i][0]-tail[i][0])+Math.abs(head[i][1]-tail[i][1]);
-        //System.out.print(nr);
         boolean[][] visited = new boolean[n][n];
         head[i] = new int[]{nr,nc};
         map[nr][nc]=1;
@@ -132,26 +195,51 @@ public class Main {
                         break;
                     }
                 }
-            }
-            
-            //for(int j=0; j<n; j++){
-            //    for(int l=0; l<n; l++){
-            //        System.out.print(map[j][l]);
-            //    }
-            //    System.out.println("");
-            //}
-            //System.out.println("---------------");
+            }  
         }
-        
     }
     
+    public static void moveOneRev(int i,int nr,int nc){
+        int num = Math.abs(head[i][0]-tail[i][0])+Math.abs(head[i][1]-tail[i][1]);
+        boolean[][] visited = new boolean[n][n];
+        head[i] = new int[]{nr,nc};
+        map[nr][nc]=1;
+        visited[nr][nc]=true;
+        for(int k=0; k<=num; k++){
+            for(int j=0; j<4; j++){
+                int r = nr+revdr[j];
+                int c = nc+revdc[j];
+                if(r<0||r>=n||c<0||c>=n){continue;}
+                if(visited[r][c]){continue;}
+                if(k==num && line[r][c]==i+1 && map[r][c]==3){map[r][c]=4;break;}
+                if(map[r][c]==2 || map[r][c]==1){
+                    if(line[r][c]==i+1){
+                        if(k==num-1){
+                            map[r][c]=3;
+                            visited[r][c]=true;
+                            nr=r;
+                            nc=c;
+                            tail[i]=new int[]{r,c};
+                        }
+                        else{
+                            map[r][c]=2;
+                            visited[r][c]=true;
+                            nr=r;
+                            nc=c;
+                        }
+                        break;
+                    }
+                }
+            }  
+        }
+    }
+
     public static boolean inRange(int r, int c,int i){
         if(r>=0 && r<n && c>=0 && c<n){
             if(line[r][c]==i+1){
                 return true;
             }
         }
-
         return false;
     }
 
@@ -162,6 +250,7 @@ public class Main {
         map[head[k-1][0]][head[k-1][1]]=1;
         map[tail[k-1][0]][tail[k-1][1]]=3;
     }
+
     public static void getScore(int r){
         if((r/n)%4==0){
             int round=(r%n);
@@ -174,9 +263,7 @@ public class Main {
         }
         else if((r/n)%4==1){
             int round=(r%n);
-            //System.out.println(r+1);
             for(int i=n-1; i>=0; i--){
-                //System.out.println(i);
                 if(map[i][round]==1 || map[i][round]==2 || map[i][round]==3){
                     point+=calScore(i,round);
                     break;
@@ -204,10 +291,6 @@ public class Main {
     }
     public static int calScore(int r, int i){
         int k = line[r][i];
-        //System.out.println(head[k-1][0]);
-        //System.out.println(r);
-        //System.out.println(head[k-1][1]);
-        //System.out.println(i);
         int score = Math.abs(head[k-1][0]-r)+Math.abs(head[k-1][1]-i)+1;
         changeDir(k);
         return score*score;            
