@@ -47,6 +47,7 @@ public class Main {
         for(int i=1; i<=m; i++){
             bfs(i,head[i-1]);
         }
+
         for(int j=0; j<n; j++){
             for(int k=0; k<n; k++){
                 if(map[j][k]==3){
@@ -54,6 +55,7 @@ public class Main {
                 }
             }
         }
+
         for(int l=1; l<=m; l++){
             for(int i=0; i<n; i++){
                 for(int j=0; j<n; j++){
@@ -63,41 +65,19 @@ public class Main {
                 }
             }
         }
-        
-        
         //라운드 진행
         for(int i=1; i<=k; i++){
+            //System.out.println(i);
             move(i);
             getScore(i-1);
-            //for(int k=0; k<m; k++){
-            //    System.out.print("head : ");
-            //    System.out.print(head[k][0]);
-            //    System.out.println(head[k][1]);
-            //    System.out.print("tail : ");
-            //    System.out.print(tail[k][0]);
-            //    System.out.println(tail[k][1]);
-            //}
             //for(int j=0; j<n; j++){
             //    for(int l=0; l<n; l++){
             //        System.out.print(map[j][l]);
             //   }
-            //    System.out.println("");
+            //    System.out.println();
             //}
-            //System.out.println("-----------");
+            //System.out.println(point);
         }
-        
-
-        //for(int i=0; i<n; i++){
-        //    for(int j=0; j<n; j++){
-        //        System.out.print(line[i][j]);
-        //    }
-        //    System.out.println();
-        //}
-
-        //for(int i=0; i<m; i++){
-        //   System.out.println(teamNum[i]);
-        //}
-
         System.out.println(point);
     }
     //line 팀 번호
@@ -122,7 +102,7 @@ public class Main {
                 }
             }
         }
-    } 
+    }
 
     public static void move(int round){
         for(int i=0; i<m; i++){
@@ -131,100 +111,22 @@ public class Main {
             int tr=tail[i][0];
             int tc=tail[i][1];
             if(teamNum[i]==lineNum[i]){
-                if(hc>tc){
-                    for(int j=0; j<4; j++){
-                        int nr =hr+dr[j];
-                        int nc =hc+dc[j];
-                        if(inRange(nr,nc,i)&&map[nr][nc]==2){
-                            moveOne(i,nr,nc);
-                            break;
-                        }
-                    }
-                }
-                //반시계
-                else if(hc<tc){
-                    for(int j=0; j<4; j++){
-                        int nr =hr+revdr[j];
-                        int nc =hc+revdc[j];
-                        if(inRange(nr,nc,i)&&map[nr][nc]==2){
-                            moveOneRev(i,nr,nc);
-                            break;
-                        }
-                    }
-                }
-                else{
-                    //시계
-                    if(hr>tr){
-                        for(int j=0; j<4; j++){
-                            int nr =hr+dr[j];
-                            int nc =hc+dc[j];
-                        
-                            if(inRange(nr,nc,i)&&map[nr][nc]==2){
-                                moveOne(i,nr,nc);
-                                break;
-                            }
-                        }
-                    }
-                    //반시계
-                    if(hr<tr){
-                        for(int j=0; j<4; j++){
-                            int nr =hr+revdr[j];
-                            int nc =hc+revdc[j];
-                        
-                            if(inRange(nr,nc,i)&&map[nr][nc]==2){
-                                moveOneRev(i,nr,nc);
-                                break;
-                            }
-                        }
+                for(int j=0; j<4; j++){
+                    int nr =hr+dr[j];
+                    int nc =hc+dc[j];
+                    if(inRange(nr,nc,i)&&map[nr][nc]==2){
+                        moveOne(i,nr,nc);
+                        break;
                     }
                 }
             }
             else{
-                if(hc>tc){
-                    for(int j=0; j<4; j++){
-                        int nr =hr+dr[j];
-                        int nc =hc+dc[j];
-                        if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                            moveOne(i,nr,nc);
-                            break;
-                        }
-                    }
-                }
-                //반시계
-                else if(hc<tc){
-                    for(int j=0; j<4; j++){
-                        int nr =hr+revdr[j];
-                        int nc =hc+revdc[j];
-                        if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                            moveOneRev(i,nr,nc);
-                            break;
-                        }
-                    }
-                }
-                else{
-                    //시계
-                    if(hr>tr){
-                        for(int j=0; j<4; j++){
-                            int nr =hr+dr[j];
-                            int nc =hc+dc[j];
-                        
-                            if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                                moveOne(i,nr,nc);
-                                break;
-                            }
-                        }
-                    }
-                    //반시계
-                    if(hr<tr){
-                        for(int j=0; j<4; j++){
-                            int nr =hr+revdr[j];
-                            int nc =hc+revdc[j];
-                        
-                            if(inRange(nr,nc,i)&&map[nr][nc]==4){
-                                moveOneRev(i,nr,nc);
-                                break;
-                            }
-                        }
+                for(int j=0; j<4; j++){
+                    int nr =hr+dr[j];
+                    int nc =hc+dc[j];
+                    if(inRange(nr,nc,i)&&map[nr][nc]==4){
+                        moveOne(i,nr,nc);
+                        break;
                     }
                 }
             }
@@ -237,57 +139,12 @@ public class Main {
         head[i] = new int[]{nr,nc};
         map[nr][nc]=1;
         visited[nr][nc]=true;
-        
-        if(num==lineNum[i]){
-            
-            for(int j=0; j<4; j++){
-                int r = nr+dr[j];
-                int c = nc+dc[j];
-                if(r<0||r>=n||c<0||c>=n){continue;}
-                if(visited[r][c]){continue;}
-                if(line[r][c]!=i+1){continue;}
-                if(map[r][c]==2){
-                    visited[r][c]=true;
-                    nr=r;
-                    nc=c;
-                    j=-1;    
-                }
-                if(map[r][c]==3){map[r][c]=2;nr=r;nc=c;j=-1;visited[r][c]=true;}
-                if(map[r][c]==1){map[r][c]=3;tail[i]=new int[]{r,c};nr=r;nc=c;j=-1;visited[r][c]=true;}
-            }
-        }
-        else{
-            for(int j=0; j<4; j++){
-                int r = nr+dr[j];
-                int c = nc+dc[j];
-                if(r<0||r>=n||c<0||c>=n){continue;}
-                if(visited[r][c]){continue;}
-                if(line[r][c]!=i+1){continue;}
-                
-                if(map[r][c]==2){
-                    visited[r][c]=true;
-                    nr=r;
-                    nc=c;
-                    j=-1;
-                }
-                if(map[r][c]==3){map[r][c]=4;map[nr][nc]=3;tail[i]=new int[]{nr,nc};break;}
-                if(map[r][c]==1){map[r][c]=2;nr=r;nc=c;visited[r][c]=true;j=-1;}  
-                
-            }
-        }
-    }
-    
-    public static void moveOneRev(int i,int nr,int nc){
-        int num = teamNum[i];
-        boolean[][] visited = new boolean[n][n];
-        head[i] = new int[]{nr,nc};
-        map[nr][nc]=1;
-        visited[nr][nc]=true;
 
         if(num==lineNum[i]){
+
             for(int j=0; j<4; j++){
-                int r = nr+revdr[j];
-                int c = nc+revdc[j];
+                int r = nr+dr[j];
+                int c = nc+dc[j];
                 if(r<0||r>=n||c<0||c>=n){continue;}
                 if(visited[r][c]){continue;}
                 if(line[r][c]!=i+1){continue;}
@@ -296,7 +153,6 @@ public class Main {
                     nr=r;
                     nc=c;
                     j=-1;
-                    continue;    
                 }
                 if(map[r][c]==3){map[r][c]=2;nr=r;nc=c;j=-1;visited[r][c]=true;}
                 if(map[r][c]==1){map[r][c]=3;tail[i]=new int[]{r,c};nr=r;nc=c;j=-1;visited[r][c]=true;}
@@ -304,19 +160,21 @@ public class Main {
         }
         else{
             for(int j=0; j<4; j++){
-                int r = nr+revdr[j];
-                int c = nc+revdc[j];
+                int r = nr+dr[j];
+                int c = nc+dc[j];
                 if(r<0||r>=n||c<0||c>=n){continue;}
                 if(visited[r][c]){continue;}
                 if(line[r][c]!=i+1){continue;}
-                if(map[r][c]==3){map[r][c]=4;map[nr][nc]=3;tail[i]=new int[]{nr,nc};break;}
-                if(map[r][c]==1){map[r][c]=2;nr=r;nc=c;visited[r][c]=true;j=-1;continue;}  
+
                 if(map[r][c]==2){
                     visited[r][c]=true;
                     nr=r;
                     nc=c;
-                    j=-1; 
+                    j=-1;
                 }
+                if(map[r][c]==3){map[r][c]=4;map[nr][nc]=3;tail[i]=new int[]{nr,nc};break;}
+                if(map[r][c]==1){map[r][c]=2;nr=r;nc=c;visited[r][c]=true;j=-1;}
+
             }
         }
     }
@@ -423,7 +281,7 @@ public class Main {
         int c = head[k-1][1];
         boolean[][] visited = new boolean[n][n];
         visited[r][c]=true;
-        
+
         for(int l=0; l<4; l++){
             int nr= r+dr[l];
             int nc= c+dc[l];
@@ -431,7 +289,7 @@ public class Main {
             if(visited[nr][nc]){continue;}
             if(line[nr][nc]!=k){continue;}
             if(map[nr][nc]==3||map[nr][nc]==4){continue;}
-            
+
             if(map[nr][nc]==2){
                 visited[nr][nc]=true;
                 score++;
@@ -441,10 +299,9 @@ public class Main {
             }
             if(nr==round&&nc==i){break;}
         }
-        
+
         //System.out.println(score);
         changeDir(k);
-        return score*score;            
+        return score*score;
     }
-    
 }
