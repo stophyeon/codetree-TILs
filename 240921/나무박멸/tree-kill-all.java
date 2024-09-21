@@ -148,27 +148,27 @@ public class Main {
                 }
             }
         }
-        if(max>0){count+=max;}
+        count+=max;
         return maxLoc;
     }
 
     public static void setCant(int row, int col){
         int[] tr = {-1,1,-1,1};
         int[] tc = {1,1,-1,-1};
-        cant[row][col]+=c+1;
+        cant[row][col]=c+1;
         map[row][col]=0;
         for(int l=0; l<4; l++){
             int nr = row+tr[l];
             int nc = col+tc[l];
             if (!inRange(nr, nc)) continue;
-            cant[nr][nc]+=c+1;
+            cant[nr][nc]=c+1;
             if(map[nr][nc]<=0) continue;
             map[nr][nc]=0;
             for(int h=0; h<k; h++) {
                 nr += tr[l];
                 nc += tc[l];
                 if (!inRange(nr, nc)) break;
-                cant[nr][nc]+=c+1;
+                cant[nr][nc]=c+1;
                 map[nr][nc]=0;
                 if(map[nr][nc]<=0) {break;}
             }
