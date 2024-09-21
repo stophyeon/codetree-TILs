@@ -40,7 +40,28 @@ public class Main {
                     }
                 }
             }
+//            for(int h=0; h<n; h++) {
+//                for (int j = 0; j < n; j++) {
+//                    System.out.print(map[h][j]);
+//                    System.out.print(" ");
+//                }
+//                System.out.println();
+//            }
+//            System.out.println("===============");
+//            for(int h=0; h<n; h++) {
+//                for (int j = 0; j < n; j++) {
+//                    System.out.print(cant[h][j]);
+//                    System.out.print(" ");
+//                }
+//                System.out.println();
+//            }
+//            System.out.println(count);
         }
+
+        //System.out.println(max[0]);
+        //System.out.println(max[1]);
+
+
         System.out.println(count);
     }
     //설장
@@ -127,7 +148,7 @@ public class Main {
                 }
             }
         }
-        count+=max;
+        if(max>0){count+=max;}
         return maxLoc;
     }
 
