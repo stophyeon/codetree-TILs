@@ -112,7 +112,7 @@ public class Main {
     public static int[] findMax(){
         int[] tr = {-1,1,-1,1};
         int[] tc = {1,1,-1,-1};
-        int max=-1;
+        int max=0;
         int[] maxLoc = new int[2];
         for(int i=0; i<n; i++){
             for (int j = 0; j < n; j++) {
