@@ -169,8 +169,8 @@ public class Main {
                 nc += tc[l];
                 if (!inRange(nr, nc)) break;
                 cant[nr][nc]=c+1;
-                map[nr][nc]=0;
                 if(map[nr][nc]<=0) {break;}
+                map[nr][nc]=0;
             }
         }
     }
