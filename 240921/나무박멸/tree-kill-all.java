@@ -124,7 +124,7 @@ public class Main {
                     if (!inRange(row, col)) continue;
                     if(map[row][col]>0) num+=map[row][col];
                     if(map[row][col]<=0) continue;
-                    for(int h=0; h<k; h++) {
+                    for(int h=1; h<k; h++) {
                         row += tr[l];
                         col += tc[l];
                         if (!inRange(row, col)) break;
@@ -164,7 +164,7 @@ public class Main {
             cant[nr][nc]=c+1;
             if(map[nr][nc]<=0) continue;
             map[nr][nc]=0;
-            for(int h=0; h<k; h++) {
+            for(int h=1; h<k; h++) {
                 nr += tr[l];
                 nc += tc[l];
                 if (!inRange(nr, nc)) break;
