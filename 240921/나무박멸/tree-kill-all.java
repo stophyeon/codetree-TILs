@@ -41,24 +41,6 @@ public class Main {
                 }
             }
         }
-        //System.out.println(max[0]);
-        //System.out.println(max[1]);
-//        for(int i=0; i<n; i++) {
-//            for (int j = 0; j < n; j++) {
-//                System.out.print(map[i][j]);
-//                System.out.print(" ");
-//            }
-//            System.out.println();
-//        }
-//        for(int i=0; i<n; i++) {
-//            for (int j = 0; j < n; j++) {
-//                System.out.print(cant[i][j]);
-//                System.out.print(" ");
-//            }
-//            System.out.println();
-//        }
-
-        //}
         System.out.println(count);
     }
     //설장
@@ -152,20 +134,20 @@ public class Main {
     public static void setCant(int row, int col){
         int[] tr = {-1,1,-1,1};
         int[] tc = {1,1,-1,-1};
-        cant[row][col]+=c;
+        cant[row][col]+=c+1;
         map[row][col]=0;
         for(int l=0; l<4; l++){
             int nr = row+tr[l];
             int nc = col+tc[l];
             if (!inRange(nr, nc)) continue;
-            cant[nr][nc]+=c;
+            cant[nr][nc]+=c+1;
             if(map[nr][nc]<=0) continue;
             map[nr][nc]=0;
             for(int h=0; h<k; h++) {
                 nr += tr[l];
                 nc += tc[l];
                 if (!inRange(nr, nc)) break;
-                cant[nr][nc]+=c;
+                cant[nr][nc]+=c+1;
                 map[nr][nc]=0;
                 if(map[nr][nc]<=0) {break;}
             }
