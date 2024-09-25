@@ -44,15 +44,7 @@ public class Main {
             loc[i/(n/m)].put(ids[i],i%(n/m));
         }
 
-        for(int i=0; i<m; i++){
-            for (int j : loc[i].keySet()) {
-                System.out.print(i);
-                System.out.print(" - ");
-                System.out.print(j);
-                System.out.print(",");
-                System.out.println(loc[i].get(j));
-            }
-        }
+        
 
         for(int i =1; i<q; i++){
             st = new StringTokenizer(br.readLine());
