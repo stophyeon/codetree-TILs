@@ -44,8 +44,6 @@ public class Main {
             loc[i/(n/m)].put(ids[i],i%(n/m));
         }
 
-        
-
         for(int i =1; i<q; i++){
             st = new StringTokenizer(br.readLine());
             int type = Integer.parseInt(st.nextToken());
@@ -69,7 +67,6 @@ public class Main {
                 for(int j=0; j<belt[i].size(); j++){
                     loc[i].put(belt[i].get(j).id,j);
                 }
-
             }
             else{
                 Box b = belt[i].get(0);
@@ -89,35 +86,34 @@ public class Main {
         for(int i=0; i<m; i++){
             if(belt[i]==null) continue;
             if(loc[i].containsKey(id)){
-                belt[i].remove(loc[i].get(id).intValue());
+                int index = loc[i].get(id);
+                belt[i].remove(index);
                 System.out.println(id);
                 loc[i].remove(id);
-                for(int j=0; j<belt[i].size(); j++){
+                for(int j=index; j<belt[i].size(); j++){
                     loc[i].put(belt[i].get(j).id,j);
                 }
                 return;
             }
         }
-
         System.out.println(-1);
     }
 
     public static void check(int id){
-        int index=0;
         for(int i=0; i<m; i++){
             if(belt[i]==null) continue;
             if(loc[i].containsKey(id)){
                 System.out.println(i+1);
-                Box b = belt[i].get(loc[i].get(id));
-                belt[i].remove(loc[i].get(id).intValue());
+                int index = loc[i].get(id);
+                Box b = belt[i].get(index);
+                belt[i].remove(index);
                 belt[i].add(0,b);
-                for(int j=0; j<belt[i].size(); j++){
+                for(int j=index; j<belt[i].size(); j++){
                     loc[i].put(belt[i].get(j).id,j);
                 }
                 return;
             }
         }
-
         System.out.println(-1);
     }
 
@@ -139,7 +135,6 @@ public class Main {
         for(int j=0; j<belt[index].size(); j++){
             loc[index].put(belt[index].get(j).id,j);
         }
-
         System.out.println(bn+1);
     }
 }
