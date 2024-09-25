@@ -22,6 +22,7 @@ public class Main {
             this.dis=dis;
         }
     }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -31,9 +32,10 @@ public class Main {
         store = new int[m][2];
         bc = new ArrayList<>();
         persons = new Person[m];
-        
+
         for(int i=0; i<n; i++){
-            st = new StringTokenizer(br.readLine());
+            st = new StringTokenizer(br.readLin
+$0e());
             for(int j=0; j<n; j++){
                 map[i][j]=Integer.parseInt(st.nextToken());
                 if(map[i][j]==1){
@@ -56,41 +58,50 @@ public class Main {
             isArrive();
             //bc 찾기
             if(total<=m){
-                int[] loc=findBC(total);
-                persons[total-1] = new Person(loc[0],loc[1],loc[2]);
-                map[loc[0]][loc[1]]=-1;
+                persons[total-1] = findBC(total);
+                map[persons[total-1].r][persons[total-1].c]=-1;
             }
 //            System.out.println(total);
 //            for(int i=0; i<m; i++) {
-//            	if(persons[i]==null) continue;
-//            	System.out.print(i+1);
-//            	System.out.print(":");
-//            	System.out.print(persons[i].r);
-//            	System.out.print(",");
-//            	System.out.print(persons[i].c);
-//            	System.out.print(",");
-//            	System.out.println(persons[i].dis);
+//                if(persons[i]==null) continue;
+//                System.out.print(i+1);
+//                System.out.print(":");
+//                System.out.print(persons[i].r);
+//                System.out.print(",");
+//                System.out.print(persons[i].c);
+//                System.out.print(",");
+//                System.out.println(persons[i].dis);
 //            }
         }
+
         System.out.println(total);
     }
 
     //최단거리 이동
     public static void move(){
+
         for(int i=0; i< persons.length; i++){
             if(persons[i]==null) continue;
+            PriorityQueue<Person> pq = new PriorityQueue<>((p1,p2)->{
+                if(p1.dis==p2.dis) {
+                    if(p1.r==p2.r) {
+                        return p1.c-p2.c;
+                    }
+                    return p1.r-p2.r;
+                }
+                return p1.dis-p2.dis;
+            });
+
+
             for(int j=0; j<4; j++){
                 int nr = persons[i].r+dr[j];
                 int nc = persons[i].c+dc[j];
                 if(!inRange(nr,nc)) continue;
                 if(map[nr][nc]==-1) continue;
                 int d = Math.abs(nr-store[i][0])+Math.abs(nc-store[i][1]);
-                if(persons[i].dis>d){
-                    persons[i].r=nr;
-                    persons[i].c=nc;
-                    persons[i].dis=d;
-                }
+                pq.add(new Person(nr,nc,d));
             }
+            persons[i] = pq.poll();
         }
     }
     //도착 여부 확인
@@ -105,24 +116,58 @@ public class Main {
         }
     }
     //최단거리 베이스 캠프
-    public static int[] findBC(int num){
+    public static Person findBC(int num){
         int min = Integer.MAX_VALUE;
-        int[] mLoc = new int[3];
+        List<Person> p = new ArrayList<>();
         for(int[] camp : bc){
-        	if(map[camp[0]][camp[1]]==-1) continue;
+            if(map[camp[0]][camp[1]]==-1) continue;
+            Queue<Person> q = new LinkedList<>();
             int dis = Math.abs(camp[0]-store[num-1][0])+Math.abs(camp[1]-store[num-1][1]);
-            if(min>dis){
-                min=dis;
-                mLoc = new int[]{camp[0],camp[1],dis};
-            }
-            if(min==dis){
-                if(camp[0]<mLoc[0]) mLoc = new int[]{camp[0],camp[1],dis};
-                if(camp[0]==mLoc[0]){
-                    if(camp[1]<mLoc[1]) mLoc = new int[]{camp[0],camp[1],dis};
+            boolean[][] visited = new boolean[n][n];
+            q.add(new Person(camp[0],camp[1],dis));
+
+            while(!q.isEmpty()){
+                Person per = q.poll();
+               
+                if(per.r==store[num-1][0]&&per.c==store[num-1][1]){p.add(new Person(camp[0],camp[1],dis));break;}
+                int r = per.r;
+                int c = per.c;
+                for(int i=0; i<4; i++){
+                    int nr = r+dr[i];
+                    int nc = c+dc[i];
+                    if(!inRange(nr,nc)) continue;
+                    if(map[nr][nc]==-1) continue;
+                    if(visited[nr][nc]) continue;
+                    q.add(new Person(nr,nc,Math.abs(nr-store[num-1][0])+Math.abs(nc-store[num-1][1])));
+                    visited[nr][nc]=true;
+                    r=nr;
+                    c=nc;
                 }
             }
+//            if(map[camp[0]][camp[1]]==-1) continue;
+//            int dis = Math.abs(camp[0]-store[num-1][0])+Math.abs(camp[1]-store[num-1][1]);
+//            if(min>dis){
+//                min=dis;
+//                p= new Person(camp[0],camp[1],dis);
+//            }
+//            if(min==dis){
+//                if(camp[0]<p.r) p= new Person(camp[0],camp[1],dis);
+//                if(camp[0]==p.r){
+//                    if(camp[1]<p.c) p= new Person(camp[0],camp[1],dis);
+//                }
+//            }
         }
-        return mLoc;
+
+
+        return Collections.min(p,(p1,p2)->{
+            if(p1.dis==p2.dis) {
+                if(p1.r==p2.r) {
+                    return p1.c-p2.c;
+                }
+                return p1.r-p2.r;
+            }
+            return p1.dis-p2.dis;
+        });
     }
 
 
