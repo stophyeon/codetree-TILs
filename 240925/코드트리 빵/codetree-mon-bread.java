@@ -34,7 +34,7 @@ public class Main {
         persons = new Person[m];
 
         for(int i=0; i<n; i++){
-            st = new StringTokenizer(br.readLin());
+            st = new StringTokenizer(br.readLine());
             for(int j=0; j<n; j++){
                 map[i][j]=Integer.parseInt(st.nextToken());
                 if(map[i][j]==1){
