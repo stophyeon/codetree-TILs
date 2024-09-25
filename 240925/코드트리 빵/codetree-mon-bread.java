@@ -34,8 +34,7 @@ public class Main {
         persons = new Person[m];
 
         for(int i=0; i<n; i++){
-            st = new StringTokenizer(br.readLin
-$0e());
+            st = new StringTokenizer(br.readLin());
             for(int j=0; j<n; j++){
                 map[i][j]=Integer.parseInt(st.nextToken());
                 if(map[i][j]==1){
@@ -61,17 +60,6 @@ $0e());
                 persons[total-1] = findBC(total);
                 map[persons[total-1].r][persons[total-1].c]=-1;
             }
-//            System.out.println(total);
-//            for(int i=0; i<m; i++) {
-//                if(persons[i]==null) continue;
-//                System.out.print(i+1);
-//                System.out.print(":");
-//                System.out.print(persons[i].r);
-//                System.out.print(",");
-//                System.out.print(persons[i].c);
-//                System.out.print(",");
-//                System.out.println(persons[i].dis);
-//            }
         }
 
         System.out.println(total);
@@ -144,21 +132,7 @@ $0e());
                     c=nc;
                 }
             }
-//            if(map[camp[0]][camp[1]]==-1) continue;
-//            int dis = Math.abs(camp[0]-store[num-1][0])+Math.abs(camp[1]-store[num-1][1]);
-//            if(min>dis){
-//                min=dis;
-//                p= new Person(camp[0],camp[1],dis);
-//            }
-//            if(min==dis){
-//                if(camp[0]<p.r) p= new Person(camp[0],camp[1],dis);
-//                if(camp[0]==p.r){
-//                    if(camp[1]<p.c) p= new Person(camp[0],camp[1],dis);
-//                }
-//            }
         }
-
-
         return Collections.min(p,(p1,p2)->{
             if(p1.dis==p2.dis) {
                 if(p1.r==p2.r) {
@@ -169,7 +143,6 @@ $0e());
             return p1.dis-p2.dis;
         });
     }
-
 
     public static boolean inRange(int r, int c){
         return r>=0&&r<n&&c>=0&&c<n;
