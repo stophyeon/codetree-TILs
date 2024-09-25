@@ -15,6 +15,7 @@ public class Main {
     static List<Box>[] belt;
     //위치 저장
     static HashMap<Integer,Integer>[] loc;
+    static HashMap<Integer,Integer> beltLoc;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -29,6 +30,7 @@ public class Main {
         int[] ws = new int[n];
         belt = new ArrayList[m];
         loc = new HashMap[m];
+        beltLoc =  new HashMap<>();
         for(int i=0; i<m; i++){
             belt[i] = new ArrayList<>();
             loc[i] = new HashMap<>();
@@ -42,6 +44,7 @@ public class Main {
         for(int i=0; i<n; i++){
             belt[i/(n/m)].add(new Box(ids[i],ws[i]));
             loc[i/(n/m)].put(ids[i],i%(n/m));
+            beltLoc.put(ids[i],i/(n/m));
         }
 
         for(int i =1; i<q; i++){
@@ -49,8 +52,8 @@ public class Main {
             int type = Integer.parseInt(st.nextToken());
             int num = Integer.parseInt(st.nextToken());
             if(type==200) move(num);
-            if(type==300) remove(num);
-            if(type==400) check(num);
+            if(type==300) {if(beltLoc.get(num)==null){System.out.println(-1);continue;}remove(num,beltLoc.get(num));}
+            if(type==400) {if(beltLoc.get(num)==null){System.out.println(-1);continue;}check(num,beltLoc.get(num));}
             if(type==500) error(num-1);
         }
     }
@@ -67,6 +70,7 @@ public class Main {
                 for(int j=0; j<belt[i].size(); j++){
                     loc[i].put(belt[i].get(j).id,j);
                 }
+                //beltLoc.remove(belt[i].get(0).id);
             }
             else{
                 Box b = belt[i].get(0);
@@ -78,41 +82,34 @@ public class Main {
                 }
             }
         }
-
         System.out.println(total);
 
     }
-    public static void remove(int id){
-        for(int i=0; i<m; i++){
-            if(belt[i]==null) continue;
-            if(loc[i].containsKey(id)){
-                int index = loc[i].get(id);
-                belt[i].remove(index);
-                System.out.println(id);
-                loc[i].remove(id);
-                for(int j=index; j<belt[i].size(); j++){
-                    loc[i].put(belt[i].get(j).id,j);
-                }
-                return;
+    public static void remove(int id,int i){
+        if(loc[i].containsKey(id)){
+            int index = loc[i].get(id);
+            belt[i].remove(index);
+            System.out.println(id);
+            loc[i].remove(id);
+            for(int j=index; j<belt[i].size(); j++){
+                loc[i].put(belt[i].get(j).id,j);
             }
+            return;
         }
         System.out.println(-1);
     }
 
-    public static void check(int id){
-        for(int i=0; i<m; i++){
-            if(belt[i]==null) continue;
-            if(loc[i].containsKey(id)){
-                System.out.println(i+1);
-                int index = loc[i].get(id);
-                Box b = belt[i].get(index);
-                belt[i].remove(index);
-                belt[i].add(0,b);
-                for(int j=index; j<belt[i].size(); j++){
-                    loc[i].put(belt[i].get(j).id,j);
-                }
-                return;
+    public static void check(int id,int i){
+        if(loc[i].containsKey(id)){
+            System.out.println(i+1);
+            int index = loc[i].get(id);
+            Box b = belt[i].get(index);
+            belt[i].remove(index);
+            belt[i].add(0,b);
+            for(int j=index; j<belt[i].size(); j++){
+                loc[i].put(belt[i].get(j).id,j);
             }
+            return;
         }
         System.out.println(-1);
     }
@@ -134,7 +131,9 @@ public class Main {
         loc[bn].clear();
         for(int j=0; j<belt[index].size(); j++){
             loc[index].put(belt[index].get(j).id,j);
+            beltLoc.put(belt[index].get(j).id,index);
         }
+
         System.out.println(bn+1);
     }
 }
