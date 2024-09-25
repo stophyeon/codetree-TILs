@@ -56,6 +56,7 @@ public class Main {
             if(type==400) {if(beltLoc.get(num)==null){System.out.println(-1);continue;}check(num,beltLoc.get(num));}
             if(type==500) error(num-1);
         }
+
     }
 
     public static void move(int max){
@@ -65,12 +66,13 @@ public class Main {
             if(belt[i].get(0).w<=max){
                 total+=belt[i].get(0).w;
                 loc[i].remove(belt[i].get(0).id);
+                beltLoc.remove(belt[i].get(0).id);
                 belt[i].remove(0);
                 //위치 변경
                 for(int j=0; j<belt[i].size(); j++){
                     loc[i].put(belt[i].get(j).id,j);
                 }
-                //beltLoc.remove(belt[i].get(0).id);
+
             }
             else{
                 Box b = belt[i].get(0);
@@ -85,6 +87,7 @@ public class Main {
         System.out.println(total);
 
     }
+
     public static void remove(int id,int i){
         if(loc[i].containsKey(id)){
             int index = loc[i].get(id);
@@ -94,6 +97,7 @@ public class Main {
             for(int j=index; j<belt[i].size(); j++){
                 loc[i].put(belt[i].get(j).id,j);
             }
+            beltLoc.remove(id);
             return;
         }
         System.out.println(-1);
@@ -133,7 +137,11 @@ public class Main {
             loc[index].put(belt[index].get(j).id,j);
             beltLoc.put(belt[index].get(j).id,index);
         }
-
+//        for(int k : beltLoc.keySet()){
+//            System.out.print(k);
+//            System.out.print("-");
+//            System.out.println(beltLoc.get(k));
+//        }
         System.out.println(bn+1);
     }
 }
