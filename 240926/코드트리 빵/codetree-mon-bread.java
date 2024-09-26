@@ -22,7 +22,19 @@ public class Main {
             this.dis=dis;
         }
     }
-    static int[][] visit;
+    public static class Node{
+        int num;
+        int r;
+        int c;
+        int dis;
+        public Node(int num, int r, int c,int dis){
+            this.num=num;
+            this.r=r;
+            this.c=c;
+            this.dis=dis;
+        }
+    }
+    static boolean[][][] visit;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -32,7 +44,7 @@ public class Main {
         store = new int[m][2];
         bc = new ArrayList<>();
         persons = new Person[m];
-        visit=new int[n][n];
+        visit=new boolean[m][n][n];
         for(int i=0; i<n; i++){
             st = new StringTokenizer(br.readLine());
             for(int j=0; j<n; j++){
@@ -58,15 +70,11 @@ public class Main {
             //bc 찾기
             if(total<=m){
                 persons[total-1] = findBC(total);
-//                System.out.print(persons[total-1].r);
-//                System.out.print(",");
-//                System.out.println(persons[total-1].c);
                 map[persons[total-1].r][persons[total-1].c]=-1;
             }
-
             for(int i=0; i<persons.length; i++){
                 if(persons[i]==null) continue;
-                visit[persons[i].r][persons[i].c]=i+1;
+                visit[i][persons[i].r][persons[i].c]=true;
             }
 //            System.out.println(total);
 //            for(int i=0; i<m; i++) {
@@ -87,25 +95,34 @@ public class Main {
     public static void move(){
         for(int i=0; i< persons.length; i++){
             if(persons[i]==null) continue;
-            PriorityQueue<Person> pq = new PriorityQueue<>((p1,p2)->{
-                if(p1.dis==p2.dis) {
-                    if(p1.r==p2.r) {
-                        return p1.c-p2.c;
+            Queue<Node> pq = new LinkedList<>();
+            int r = persons[i].r;
+            int c = persons[i].c;
+            int d = persons[i].dis;
+            boolean[][] visited = new boolean[n][n];
+            visited[r][c]=true;
+            int[][] bfs = new int[4][2];
+            pq.add(new Node(0,r,c,0));
+            int count=0;
+            while(!pq.isEmpty()){
+                Node p=pq.poll();
+                if(p.r==store[i][0]&&p.c==store[i][1]){persons[i]=new Person(bfs[p.num][0],bfs[p.num][1],d-1);break;}
+                for(int j=0; j<4; j++){
+                    int nr = p.r+dr[j];
+                    int nc = p.c+dc[j];
+                    if(!inRange(nr,nc)) continue;
+                    if(map[nr][nc]==-1) continue;
+                    if(visited[nr][nc]) continue;
+                    if(count==0){
+                        bfs[j][0] = nr;
+                        bfs[j][1] = nc;
+                        p.num=j;
                     }
-                    return p1.r-p2.r;
+                    pq.add(new Node(p.num,nr,nc,p.dis+1));
+                    visited[nr][nc]=true;
                 }
-                return p1.dis-p2.dis;
-            });
-            for(int j=0; j<4; j++){
-                int nr = persons[i].r+dr[j];
-                int nc = persons[i].c+dc[j];
-                if(!inRange(nr,nc)) continue;
-                if(map[nr][nc]==-1) continue;
-                if(visit[nr][nc]==i+1) continue;
-                int d = Math.abs(nr-store[i][0])+Math.abs(nc-store[i][1]);
-                pq.add(new Person(nr,nc,d));
+                count++;
             }
-            persons[i] = pq.poll();
         }
     }
     //도착 여부 확인
@@ -114,11 +131,6 @@ public class Main {
             if(persons[i]==null) continue;
             if(persons[i].r==store[i][0] && persons[i].c==store[i][1]){
                 map[store[i][0]][store[i][1]]=-1;
-//                System.out.print(total);
-//                System.out.print(" : ");
-//                System.out.print(store[i][0]);
-//                System.out.print(",");
-//                System.out.println(store[i][1]);
                 persons[i]=null;
                 arrive++;
             }
@@ -136,17 +148,9 @@ public class Main {
             visited[camp[0]][camp[1]]=true;
             while(!q.isEmpty()){
                 Person per = q.poll();
-//                if(camp[0]==3&&camp[1]==1&&num==2){
-//                    System.out.print(per.r);
-//                    System.out.print(",");
-//                    System.out.print(per.c);
-//                    System.out.print(",");
-//                    System.out.println(per.dis);
-//                }
                 if(per.r==store[num-1][0]&&per.c==store[num-1][1]){p.add(new Person(camp[0],camp[1],per.dis));break;}
                 int r = per.r;
                 int c = per.c;
-
                 for(int i=0; i<4; i++){
                     int nr = r+dr[i];
                     int nc = c+dc[i];
@@ -162,11 +166,7 @@ public class Main {
 
 
 //        for(Person ps : p){
-//            System.out.print(num);
-//            System.out.print("-");
-//            System.out.print(ps.r);
-//            System.out.print(",");
-//            System.out.print(ps.c);
+//
 //            System.out.print(",");
 //            System.out.println(ps.dis);
 //        }
@@ -179,7 +179,6 @@ public class Main {
             }
             return p1.dis-p2.dis;
         });
-
 
         return new Person(ps.r, ps.c,Math.abs(ps.r-store[num-1][0])+Math.abs(ps.c-store[num-1][1]));
     }
