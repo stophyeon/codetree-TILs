@@ -27,7 +27,7 @@ public class Main {
         m=Integer.parseInt(st.nextToken());
         k=Integer.parseInt(st.nextToken());
         map=new int[n][m];
-        turn=new int[n][n];
+        turn=new int[n][m];
         for(int i=0; i<n; i++) {
             st = new StringTokenizer(br.readLine());
             for(int j=0; j<m; j++) {
@@ -136,8 +136,8 @@ public class Main {
                 int nr = n.r+dr[i];
                 int nc = n.c+dc[i];
                 if(!inRange(nr,nc)) {
-                    nr = reverse(nr);
-                    nc = reverse(nc);
+                    nr = reverse(nr,0);
+                    nc = reverse(nc,1);
                 }
                 if(visited[nr][nc]) continue;
                 if(map[nr][nc]==0) continue;
@@ -150,16 +150,22 @@ public class Main {
         }
         return res;
     }
-    public static int reverse(int r) {
-        if(r==-1) {
-            return n-1;
+    public static int reverse(int r,int type) {
+        if(type==0){
+            if(r==-1) return n-1;
+            if(r==n) return 0;
+            else {
+                return r;
+            }
         }
-        if(r==n) {
-            return 0;
+        else{
+            if(r==-1) return m-1;
+            if(r==m) return 0;
+            else {
+                return r;
+            }
         }
-        else {
-            return r;
-        }
+        
     }
     public static void attackBomb(int[] w, int[] s,List<int[]> port){
         int level = map[w[0]][w[1]];
@@ -171,8 +177,8 @@ public class Main {
             int nr = s[0]+dr[i];
             int nc = s[1]+dc[i];
             if(!inRange(nr,nc)){
-                nr=reverse(nr);
-                nc=reverse(nc);
+                nr=reverse(nr,0);
+                nc=reverse(nc,1);
             }
             if(map[nr][nc]==0) continue;
             if(nr==w[0]&&nc==w[1]) continue;
