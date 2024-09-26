@@ -18,8 +18,8 @@ public class Main {
             this.c=c;
             this.path=path;
         }
-
     }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -73,7 +73,7 @@ public class Main {
         for(int i=0; i<n; i++) {
             for(int j=0; j<m; j++) {
                 if(map[i][j]==0) continue;
-                if(min>map[i][j]) {
+                if(min>=map[i][j]) {
                     min=map[i][j];
                     res.add(new int[] {i,j,map[i][j]});
                 }
@@ -101,7 +101,7 @@ public class Main {
         for(int i=0; i<n; i++) {
             for(int j=0; j<m; j++) {
                 if(map[i][j]==0) continue;
-                if(max<map[i][j]) {
+                if(max<=map[i][j]) {
                     max=map[i][j];
                     res.add(new int[] {i,j,map[i][j]});
                 }
