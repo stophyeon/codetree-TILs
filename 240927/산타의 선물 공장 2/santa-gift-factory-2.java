@@ -12,7 +12,6 @@ public class Main {
     static int[] tail=new int[max+1];
     static int[] prev=new int[max+1];
     static int[] next=new int[max+1];
-    
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -36,6 +35,7 @@ public class Main {
             head[i]=belt[i].get(0);
             tail[i]=belt[i].get(belt[i].size()-1);
             size[i]=belt[i].size();
+            if(size[i]==1) continue;
             for(int j=0; j<size[i]-1; j++){
                 prev[belt[i].get(j+1)]=belt[i].get(j);
                 next[belt[i].get(j)]=belt[i].get(j+1);
@@ -69,15 +69,7 @@ public class Main {
                 int bnum= Integer.parseInt(st.nextToken());
                 getBeltInfo(bnum-1);
             }
-//            for(int j=0; j<n; j++){
-//                System.out.print(head[j]);
-//                System.out.print(",");
-//                System.out.print(tail[j]);
-//                System.out.print(",");
-//                System.out.print(next[head[j]]);
-//                System.out.print(",");
-//                System.out.println(prev[tail[j]]);
-//            }
+            
         }
     }
 
@@ -91,6 +83,8 @@ public class Main {
         head[dst]=sh;
         next[st]=dh;
         prev[dh]=st;
+
+
         size[dst]+=size[src];
         size[src]=0;
         System.out.println(size[dst]);
@@ -122,8 +116,8 @@ public class Main {
             int ndh = next[dh];
             head[dst]=sh;
             head[src]=dh;
-            prev[nsh]= dh;
-            prev[ndh]= sh;
+            prev[nsh]=dh;
+            prev[ndh]=sh;
             next[sh]=ndh;
             next[dh]=nsh;
             if(size[src]==1) tail[src]=head[src];
@@ -145,6 +139,7 @@ public class Main {
             next[s]=head[dst];
             prev[head[src]]=s;
             head[dst]=s;
+            prev[head[src]]=0;
             if(size[dst]==1) prev[tail[dst]]=s;
             size[src]-=len;
             size[dst]+=len;
@@ -156,8 +151,7 @@ public class Main {
         if(prev[num]==0&&next[num]==0) {System.out.println(-3);return;}
         if(prev[num]==0) System.out.println(2*next[num]-1);
         else if(next[num]==0) System.out.println(prev[num]-2);
-        else System.out.println(prev[num]+2*next[num]);
-
+        else {System.out.println(prev[num]+2*next[num]);}
     }
 
     public static void getBeltInfo(int num){
