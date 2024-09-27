@@ -106,7 +106,7 @@ public class Main {
             List<Integer> sr = new ArrayList<>();
 
             for(int i=0; i<belt[src].size()/2; i++){
-                sr.add(belt[src].get(0));
+                sr.add(belt[src].get(i));
             }
             for(int i=0; i<sr.size(); i++){
                 belt[src].remove(0);
