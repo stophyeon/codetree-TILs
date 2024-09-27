@@ -99,9 +99,9 @@ public class Main {
             List<Integer> s = new LinkedList<>(belt[src]);
             int sr =belt[src].get(0);
             int ds =belt[dst].get(0);
-            s.remove(sr);
+            s.remove(0);
             s.add(0,ds);
-            d.remove(ds);
+            d.remove(0);
             d.add(0,sr);
             belt[src]=s;
             belt[dst]=d;
