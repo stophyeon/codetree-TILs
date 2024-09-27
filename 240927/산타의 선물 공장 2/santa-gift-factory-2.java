@@ -19,6 +19,7 @@ public class Main {
         m=Integer.parseInt(st.nextToken());
         belt = new LinkedList[n];
         size= new int[n];
+
         for(int i=0; i<n; i++){
             belt[i] = new LinkedList<>();
         }
@@ -27,8 +28,8 @@ public class Main {
             int index = Integer.parseInt(st.nextToken());
             belt[index-1].add(i+1);
             loc.put(i+1,index-1);
-
         }
+
         for(int i=0; i<n; i++){
             size[i]=belt[i].size();
         }
@@ -61,11 +62,6 @@ public class Main {
                 getBeltInfo(bnum-1);
             }
 //            for(int j=0; j<n; j++){
-//                System.out.print(size[j]);
-//                System.out.print(",");
-//            }
-//            System.out.println();
-//            for(int j=0; j<n; j++){
 //                System.out.print(j+1);
 //                System.out.print(" - ");
 //                for(int s : belt[j]){
@@ -82,7 +78,7 @@ public class Main {
         int len = size[src];
         for(int i=0; i<len; i++){
             belt[dst].add(i,belt[src].get(0));
-            loc.put(belt[src].get(0),dst);
+            loc.replace(belt[src].get(0),dst);
             belt[src].remove(0);
         }
         size[dst]+=size[src];
@@ -93,21 +89,21 @@ public class Main {
     public static void moveFront(int src, int dst){
         if(belt[src].isEmpty()&&belt[dst].isEmpty()) {System.out.println(0);return;}
         else if(belt[src].isEmpty()){
-            loc.put(belt[dst].get(0),src);
+            loc.replace(belt[dst].get(0),src);
             belt[src].add(belt[dst].get(0));
             belt[dst].remove(0);
             size[src]+=1;
             size[dst]-=1;
         }
         else if(belt[dst].isEmpty()){
-            loc.put(belt[src].get(0),dst);
+            loc.replace(belt[src].get(0),dst);
             belt[dst].add(belt[src].get(0));
             belt[src].remove(0);
             size[dst]+=1;
             size[src]-=1;
         }else{
-            loc.put(belt[src].get(0),dst);
-            loc.put(belt[dst].get(0),src);
+            loc.replace(belt[src].get(0),dst);
+            loc.replace(belt[dst].get(0),src);
             int sr =belt[src].get(0);
             belt[src].remove(0);
             belt[src].add(0,belt[dst].get(0));
@@ -123,7 +119,7 @@ public class Main {
             int len = size[src]/2;
             for(int i=0; i<len; i++){
                 belt[dst].add(i,belt[src].get(0));
-                loc.put(belt[src].get(0),dst);
+                loc.replace(belt[src].get(0),dst);
                 belt[src].remove(0);
             }
             size[src]-=len;
