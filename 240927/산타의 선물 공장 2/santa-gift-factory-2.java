@@ -165,6 +165,6 @@ public class Main {
             if(b==0) b=-1;
             System.out.println(a+2*b+3*c);
 
+        }
     }
-
 }
