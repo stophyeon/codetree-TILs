@@ -5,8 +5,10 @@ public class Main {
     static int q;
     static int n;
     static int m;
+    static int[] size;
     static LinkedList<Integer>[] belt;
     static HashMap<Integer,Integer> loc=new HashMap<>();
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -16,19 +18,25 @@ public class Main {
         n=Integer.parseInt(st.nextToken());
         m=Integer.parseInt(st.nextToken());
         belt = new LinkedList[n];
+        size= new int[n];
         for(int i=0; i<n; i++){
             belt[i] = new LinkedList<>();
         }
+
         for(int i=0; i<m; i++){
             int index = Integer.parseInt(st.nextToken());
             belt[index-1].add(i+1);
             loc.put(i+1,index-1);
+
         }
-        
+        for(int i=0; i<n; i++){
+            size[i]=belt[i].size();
+        }
+
         for(int i=1; i<q; i++){
             st = new StringTokenizer(br.readLine());
             int type = Integer.parseInt(st.nextToken());
-            
+
             if(type==200){
                 int src = Integer.parseInt(st.nextToken());
                 int dst = Integer.parseInt(st.nextToken());
@@ -52,18 +60,34 @@ public class Main {
                 int bnum= Integer.parseInt(st.nextToken());
                 getBeltInfo(bnum-1);
             }
+//            for(int j=0; j<n; j++){
+//                System.out.print(size[j]);
+//                System.out.print(",");
+//            }
+//            System.out.println();
+//            for(int j=0; j<n; j++){
+//                System.out.print(j+1);
+//                System.out.print(" - ");
+//                for(int s : belt[j]){
+//                    System.out.print(s);
+//                    System.out.print(",");
+//                }
+//                System.out.println();
+//            }
         }
     }
 
     public static void moveAll(int src, int dst){
-        if(belt[src].isEmpty()) {System.out.println(belt[dst].size());return;}
-        int len = belt[src].size();
+        if(belt[src].isEmpty()) {System.out.println(size[dst]);return;}
+        int len = size[src];
         for(int i=0; i<len; i++){
             belt[dst].add(i,belt[src].get(0));
             loc.put(belt[src].get(0),dst);
             belt[src].remove(0);
         }
-        System.out.println(belt[dst].size());
+        size[dst]+=size[src];
+        size[src]=0;
+        System.out.println(size[dst]);
     }
 
     public static void moveFront(int src, int dst){
@@ -72,11 +96,15 @@ public class Main {
             loc.put(belt[dst].get(0),src);
             belt[src].add(belt[dst].get(0));
             belt[dst].remove(0);
+            size[src]+=1;
+            size[dst]-=1;
         }
         else if(belt[dst].isEmpty()){
             loc.put(belt[src].get(0),dst);
             belt[dst].add(belt[src].get(0));
             belt[src].remove(0);
+            size[dst]+=1;
+            size[src]-=1;
         }else{
             loc.put(belt[src].get(0),dst);
             loc.put(belt[dst].get(0),src);
@@ -86,26 +114,27 @@ public class Main {
             belt[dst].remove(0);
             belt[dst].add(0,sr);
         }
-        System.out.println(belt[dst].size());
+        System.out.println(size[dst]);
     }
     public static void divide(int src, int dst){
-        if(belt[src].isEmpty()) {System.out.println(belt[dst].size());return;}
-        if(belt[src].size()==1) System.out.println(belt[dst].size());
+        if(belt[src].isEmpty()) {System.out.println(size[dst]);return;}
+        if(belt[src].size()==1) System.out.println(size[dst]);
         else{
-            int len = belt[src].size()/2;
+            int len = size[src]/2;
             for(int i=0; i<len; i++){
                 belt[dst].add(i,belt[src].get(0));
                 loc.put(belt[src].get(0),dst);
                 belt[src].remove(0);
             }
-            System.out.println(belt[dst].size());
+            size[src]-=len;
+            size[dst]+=len;
+            System.out.println(size[dst]);
         }
-
     }
 
     public static void getBoxInfo(int num){
         int index = loc.get(num);
-        if(belt[index].size()<=1) {System.out.println(-3);return;}
+        if(size[index]<=1) {System.out.println(-3);return;}
         int lc=belt[index].indexOf(num);
         if(lc-1<0){
             System.out.println(2*belt[index].get(lc+1)-1);
@@ -122,8 +151,8 @@ public class Main {
         if(belt[num].isEmpty()) System.out.println(-3);
         else{
             int a=belt[num].get(0);
-            int b=belt[num].get(belt[num].size()-1);
-            int c = belt[num].size();
+            int b=belt[num].get(size[num]-1);
+            int c = size[num];
             System.out.println(a+2*b+3*c);
         }
 
