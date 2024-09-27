@@ -120,15 +120,16 @@ public class Main {
     public static void getBoxInfo(int num){
         int index = loc.get(num);
         if(size[index]<=1) {System.out.println(-3);return;}
-        int lc=belt[index].indexOf(num);
+        List<Integer> l = belt[index];
+        int lc=l.indexOf(num);
         if(lc-1<0){
-            System.out.println(2*belt[index].get(lc+1)-1);
+            System.out.println(2*l.get(lc+1)-1);
         }
-        else if(lc+1>=belt[index].size()){
-            System.out.println(belt[index].get(lc-1)-2);
+        else if(lc+1>=size[index]){
+            System.out.println(l.get(lc-1)-2);
         }
         else{
-            System.out.println(belt[index].get(lc-1)+2*belt[index].get(lc+1));
+            System.out.println(l.get(lc-1)+2*l.get(lc+1));
         }
     }
 
