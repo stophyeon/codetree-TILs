@@ -156,7 +156,7 @@ public class Main {
 
     public static void getBeltInfo(int num){
         if(size[num]==0) System.out.println(-3);
-        if(size[num]==1) System.out.println(0);
+        else if(size[num]==1) System.out.println(0);
         else{
             int a=head[num];
             int b=tail[num];
