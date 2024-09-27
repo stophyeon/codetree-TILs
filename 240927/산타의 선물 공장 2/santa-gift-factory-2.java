@@ -104,12 +104,13 @@ public class Main {
         if(belt[src].size()==1) System.out.println(belt[dst].size());
         else{
             List<Integer> sr = new ArrayList<>();
+
             for(int i=0; i<belt[src].size()/2; i++){
                 sr.add(belt[src].get(0));
-                belt[src].remove(0);
             }
-            for(int s: sr){
-                loc.put(s,dst);
+            for(int i=0; i<sr.size(); i++){
+                belt[src].remove(0);
+                loc.put(sr.get(i),dst);
             }
             sr.addAll(belt[dst]);
             belt[dst].clear();
@@ -142,5 +143,7 @@ public class Main {
             int c = belt[num].size();
             System.out.println(a+2*b+3*c);
         }
+
     }
+
 }
