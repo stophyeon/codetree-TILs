@@ -122,6 +122,8 @@ public class Main {
             int ndh = next[dh];
             head[dst]=sh;
             head[src]=dh;
+            prev[nsh]= dh;
+            prev[ndh]= sh;
             next[sh]=ndh;
             next[dh]=nsh;
             if(size[src]==1) tail[src]=head[src];
