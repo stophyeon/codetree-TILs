@@ -6,7 +6,7 @@ public class Main {
     static int n;
     static int m;
     static int[] size;
-    static LinkedList<Integer>[] belt;
+    static List<Integer>[] belt;
     static HashMap<Integer,Integer> loc=new HashMap<>();
 
     public static void main(String[] args) throws IOException {
@@ -17,11 +17,11 @@ public class Main {
         st.nextToken();
         n=Integer.parseInt(st.nextToken());
         m=Integer.parseInt(st.nextToken());
-        belt = new LinkedList[n];
+        belt = new ArrayList[n];
         size= new int[n];
 
         for(int i=0; i<n; i++){
-            belt[i] = new LinkedList<>();
+            belt[i] = new ArrayList<>();
         }
         for(int i=0; i<m; i++){
             int index = Integer.parseInt(st.nextToken());
@@ -64,12 +64,14 @@ public class Main {
 
     public static void moveAll(int src, int dst){
         if(size[src]==0) {System.out.println(size[dst]);return;}
-        int len = size[src];
-        for(int i=0; i<len; i++){
-            belt[dst].add(i,belt[src].get(0));
-            loc.replace(belt[src].get(0),dst);
-            belt[src].remove(0);
+        List<Integer> d = new ArrayList<>(belt[dst]);
+        List<Integer> s = new ArrayList<>(belt[src]);
+        s.addAll(d);
+        for(int i=0; i<size[src]; i++){
+            loc.replace(s.get(0),dst);
         }
+        belt[dst]=s;
+        belt[src].clear();
         size[dst]+=size[src];
         size[src]=0;
         System.out.println(size[dst]);
@@ -93,11 +95,17 @@ public class Main {
         }else{
             loc.replace(belt[src].get(0),dst);
             loc.replace(belt[dst].get(0),src);
+            List<Integer> d = new LinkedList<>(belt[dst]);
+            List<Integer> s = new LinkedList<>(belt[src]);
             int sr =belt[src].get(0);
-            belt[src].remove(0);
-            belt[src].add(0,belt[dst].get(0));
-            belt[dst].remove(0);
-            belt[dst].add(0,sr);
+            int ds =belt[dst].get(0);
+            s.remove(sr);
+            s.add(0,ds);
+            d.remove(ds);
+            d.add(0,sr);
+            belt[src]=s;
+            belt[dst]=d;
+
         }
         System.out.println(size[dst]);
     }
@@ -121,15 +129,15 @@ public class Main {
         int index = loc.get(num);
         if(size[index]<=1) {System.out.println(-3);return;}
         List<Integer> l = belt[index];
-        int lc=l.indexOf(num);
+        int lc=belt[index].indexOf(num);
         if(lc-1<0){
-            System.out.println(2*l.get(lc+1)-1);
+            System.out.println(2*belt[index].get(lc+1)-1);
         }
         else if(lc+1>=size[index]){
-            System.out.println(l.get(lc-1)-2);
+            System.out.println(belt[index].get(lc-1)-2);
         }
         else{
-            System.out.println(l.get(lc-1)+2*l.get(lc+1));
+            System.out.println(belt[index].get(lc-1)+2*belt[index].get(lc+1));
         }
     }
 
