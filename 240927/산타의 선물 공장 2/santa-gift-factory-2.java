@@ -66,14 +66,12 @@ public class Main {
 
     public static void moveAll(int src, int dst){
         if(belt[src].isEmpty()) {System.out.println(belt[dst].size());return;}
-        List<Integer> sr = belt[src];
-        sr.addAll(belt[dst]);
-        belt[dst].clear();
-        for(int k : sr){
-            belt[dst].add(k);
-            loc.put(k,dst);
+        int len = belt[src].size();
+        for(int i=0; i<len; i++){
+            belt[dst].add(i,belt[src].get(0));
+            loc.put(belt[src].get(0),dst);
+            belt[src].remove(0);
         }
-        belt[src].clear();
         System.out.println(belt[dst].size());
     }
 
