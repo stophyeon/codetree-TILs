@@ -100,7 +100,7 @@ public class Main {
         System.out.println(belt[dst].size());
     }
     public static void divide(int src, int dst){
-        if(belt[src].isEmpty()) return;
+        if(belt[src].isEmpty()) {System.out.println(belt[dst].size());return;}
         if(belt[src].size()==1) System.out.println(belt[dst].size());
         else{
             List<Integer> sr = new ArrayList<>();
@@ -142,7 +142,5 @@ public class Main {
             int c = belt[num].size();
             System.out.println(a+2*b+3*c);
         }
-
     }
-
 }
