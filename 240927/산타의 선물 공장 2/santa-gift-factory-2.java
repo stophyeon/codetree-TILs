@@ -5,7 +5,7 @@ public class Main {
     static int q;
     static int n;
     static int m;
-    static List<Integer>[] belt;
+    static LinkedList<Integer>[] belt;
     static HashMap<Integer,Integer> loc=new HashMap<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -15,20 +15,20 @@ public class Main {
         st.nextToken();
         n=Integer.parseInt(st.nextToken());
         m=Integer.parseInt(st.nextToken());
-        belt = new ArrayList[n];
+        belt = new LinkedList[n];
         for(int i=0; i<n; i++){
-            belt[i] = new ArrayList<>();
+            belt[i] = new LinkedList<>();
         }
         for(int i=0; i<m; i++){
             int index = Integer.parseInt(st.nextToken());
             belt[index-1].add(i+1);
             loc.put(i+1,index-1);
         }
-        //System.out.println();
+        
         for(int i=1; i<q; i++){
             st = new StringTokenizer(br.readLine());
             int type = Integer.parseInt(st.nextToken());
-            //System.out.println(type);
+            
             if(type==200){
                 int src = Integer.parseInt(st.nextToken());
                 int dst = Integer.parseInt(st.nextToken());
@@ -52,15 +52,6 @@ public class Main {
                 int bnum= Integer.parseInt(st.nextToken());
                 getBeltInfo(bnum-1);
             }
-//            for(int j=0; j<n; j++){
-//                System.out.print(j+1);
-//                System.out.print(" - ");
-//                for(int s : belt[j]){
-//                    System.out.print(s);
-//                    System.out.print(",");
-//                }
-//                System.out.println();
-//            }
         }
     }
 
