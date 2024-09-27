@@ -105,8 +105,8 @@ public class Main {
 
     public static void getBoxInfo(int num){
         int index = loc.get(num);
-        int lc=belt[index].indexOf(num);
         if(belt[index].size()<=1) {System.out.println(-3);return;}
+        int lc=belt[index].indexOf(num);
         if(lc-1<0){
             System.out.println(2*belt[index].get(lc+1)-1);
         }
