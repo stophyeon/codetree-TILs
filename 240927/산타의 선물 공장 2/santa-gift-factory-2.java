@@ -65,7 +65,7 @@ public class Main {
     }
 
     public static void moveAll(int src, int dst){
-        if(belt[src].isEmpty()) return;
+        if(belt[src].isEmpty()) {System.out.println(belt[dst].size());return;}
         List<Integer> sr = belt[src];
         sr.addAll(belt[dst]);
         belt[dst].clear();
