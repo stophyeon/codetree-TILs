@@ -156,12 +156,14 @@ public class Main {
 
     public static void getBeltInfo(int num){
         if(size[num]==0) System.out.println(-3);
+        if(size[num]==1) System.out.println(0);
         else{
             int a=head[num];
             int b=tail[num];
             int c=size[num];
+            if(a==0) a=-1;
+            if(b==0) b=-1;
             System.out.println(a+2*b+3*c);
-        }
 
     }
 
