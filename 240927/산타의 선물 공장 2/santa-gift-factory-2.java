@@ -103,8 +103,8 @@ public class Main {
             s.add(0,ds);
             d.remove(0);
             d.add(0,sr);
-            belt[src]=s;
-            belt[dst]=d;
+            belt[src]=s.stream().toList();
+            belt[dst]=d.stream().toList();
 
         }
         System.out.println(size[dst]);
