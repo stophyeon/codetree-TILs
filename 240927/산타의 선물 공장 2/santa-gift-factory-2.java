@@ -103,14 +103,12 @@ public class Main {
         if(belt[src].isEmpty()) {System.out.println(belt[dst].size());return;}
         if(belt[src].size()==1) System.out.println(belt[dst].size());
         else{
+            int len = belt[src].size()/2;
             List<Integer> sr = new ArrayList<>();
-
-            for(int i=0; i<belt[src].size()/2; i++){
-                sr.add(belt[src].get(i));
-            }
-            for(int i=0; i<sr.size(); i++){
+            for(int i=0; i<len; i++){
+                sr.add(belt[src].get(0));
+                loc.put(belt[src].get(0),dst);
                 belt[src].remove(0);
-                loc.put(sr.get(i),dst);
             }
             sr.addAll(belt[dst]);
             belt[dst].clear();
