@@ -104,15 +104,11 @@ public class Main {
         if(belt[src].size()==1) System.out.println(belt[dst].size());
         else{
             int len = belt[src].size()/2;
-            List<Integer> sr = new ArrayList<>();
             for(int i=0; i<len; i++){
-                sr.add(belt[src].get(0));
+                belt[dst].add(i,belt[src].get(0));
                 loc.put(belt[src].get(0),dst);
                 belt[src].remove(0);
             }
-            sr.addAll(belt[dst]);
-            belt[dst].clear();
-            belt[dst]=sr;
             System.out.println(belt[dst].size());
         }
 
