@@ -22,7 +22,7 @@ public class Main {
     });
     static HashMap<String,Integer> solved = new HashMap<>();
     static HashMap<String,Integer> cal = new HashMap<>();
-    static List<String> urls = new ArrayList<>();
+    static HashSet<String> urls = new HashSet<>();
     static String[] calculator;
     static int[] start;
     public static void main(String[] args) throws IOException {
@@ -70,15 +70,18 @@ public class Main {
         urls.add(u);
     }
 
-    public static void tryOne(int t){
-        for(Problem p: pq){
-            if(possible(p.url.split("/")[0],t)){
-                for (int i=0; i<n; i++){
-                    if(calculator[i].isEmpty()) {
-                        calculator[i]=p.url.split("/")[0];
-                        cal.put(calculator[i],i);
-                        start[i]=t;
-                        pq.poll();
+    public static void tryOne(int t) {
+        Iterator<Problem> iterator = pq.iterator();
+        while (iterator.hasNext()) {
+            Problem p = iterator.next();
+            String domain = p.url.split("/")[0];
+            if (possible(domain, t)) {
+                for (int i = 0; i < n; i++) {
+                    if (calculator[i].isEmpty()) {
+                        calculator[i] = domain;
+                        cal.put(domain, i);
+                        start[i] = t;
+                        iterator.remove();
                         urls.remove(p.url);
                         return;
                     }
