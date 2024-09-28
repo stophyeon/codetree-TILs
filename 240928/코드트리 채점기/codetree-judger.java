@@ -20,7 +20,7 @@ public class Main {
         }
         return p1.p-p2.p;
     });
-    static int[] solved=new int[2];
+    static List<Problem> solved = new ArrayList<>();
 
     static List<String> urls = new ArrayList<>();
     static String[] calculator;
@@ -54,9 +54,16 @@ public class Main {
                 end(t,id);
             }
             if(type==500) System.out.println(pq.size());
+//            for(Problem p : pq){
+//                System.out.print(p.url);
+//                System.out.print(" - ");
+//                System.out.print(p.p);
+//                System.out.print(",");
+//                System.out.println(p.time);
+//            }
+//            System.out.println();
         }
     }
-
     public static void request(int t, int p, String u){
         if(urls.contains(u)) return;
         pq.add(new Problem(t,p,u));
@@ -65,10 +72,10 @@ public class Main {
 
     public static void tryOne(int t){
         for(Problem p: pq){
-            if(possible(p,t)){
+            if(possible(p.url.split("/")[0],t)){
                 for (int i=0; i<n; i++){
                     if(calculator[i].isEmpty()) {
-                        calculator[i]=p.url;
+                        calculator[i]=p.url.split("/")[0];
                         start[i]=t;
                         pq.poll();
                         urls.remove(p.url);
@@ -80,15 +87,19 @@ public class Main {
     }
 
     public static void end(int t, int id){
-        solved[0]=start[id-1];
-        solved[1]=t-start[id-1];
+        if(calculator[id-1].isEmpty()) return;
+        solved.add(new Problem(start[id-1],t-start[id-1], calculator[id-1]));
         calculator[id-1]="";
         start[id-1]=0;
     }
-    public static boolean possible(Problem p,int t){
-        if(3*solved[1]+solved[0]>t) return false;
+    public static boolean possible(String domain,int t){
+        for(Problem b : solved){
+            if(b.url.equals(domain)){
+                if(t<b.time+3*b.p) return false;
+            }
+        }
         for(String s: calculator){
-            if(p.url.equals(s)) return false;
+            if(domain.equals(s)) return false;
         }
         return true;
     }
