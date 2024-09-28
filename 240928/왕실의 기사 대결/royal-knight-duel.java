@@ -66,6 +66,7 @@ public class Main {
             int index=Integer.parseInt(st.nextToken())-1;
             int dir = Integer.parseInt(st.nextToken());
             List<Integer> moveKnight = new ArrayList<>();
+            if(kn[index]==null) continue;
             moveKnight.add(index+1);
             boolean poss = moveCheck(index,dir, moveKnight);
             if(poss) {
