@@ -20,8 +20,8 @@ public class Main {
         }
         return p1.p-p2.p;
     });
-    static List<Problem> solved = new ArrayList<>();
-
+    static HashMap<String,Integer> solved = new HashMap<>();
+    static HashMap<String,Integer> cal = new HashMap<>();
     static List<String> urls = new ArrayList<>();
     static String[] calculator;
     static int[] start;
@@ -76,6 +76,7 @@ public class Main {
                 for (int i=0; i<n; i++){
                     if(calculator[i].isEmpty()) {
                         calculator[i]=p.url.split("/")[0];
+                        cal.put(calculator[i],i);
                         start[i]=t;
                         pq.poll();
                         urls.remove(p.url);
@@ -88,19 +89,17 @@ public class Main {
 
     public static void end(int t, int id){
         if(calculator[id-1].isEmpty()) return;
-        solved.add(new Problem(start[id-1],t-start[id-1], calculator[id-1]));
+        solved.put(calculator[id-1],start[id-1]+3*(t-start[id-1]));
+        cal.remove(calculator[id-1]);
         calculator[id-1]="";
         start[id-1]=0;
     }
     public static boolean possible(String domain,int t){
-        for(Problem b : solved){
-            if(b.url.equals(domain)){
-                if(t<b.time+3*b.p) return false;
-            }
+
+        if(solved.containsKey(domain)){
+            if(solved.get(domain)>t) return false;
         }
-        for(String s: calculator){
-            if(domain.equals(s)) return false;
-        }
-        return true;
+        else {return true;}
+        return !cal.containsKey(domain);
     }
 }
