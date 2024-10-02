@@ -4,6 +4,7 @@ import  java.io.*;
 public class Main {
     static int q;
     static int m;
+    
     public static class Box{
         int id;
         int w;
@@ -12,6 +13,7 @@ public class Main {
             this.w=w;
         }
     }
+
     static List<Box>[] belt;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -109,10 +111,9 @@ public class Main {
         if(belt[num]==null) {System.out.println(-1);return;}
         int next = (num+1)%m;
         while(true){
-            if(belt[next]==null) {next=(next+1)%m;continue;}
-            List<Box> list = new ArrayList<>(belt[num]);
+            if(belt[next]==null) {next=(next+1)%m; continue;}
+            belt[next].addAll(belt[num]);
             belt[num]=null;
-            belt[next].addAll(list);
             System.out.println(num);
             break;
         }
