@@ -13,32 +13,23 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         arr= new int[n];
-
         for(int i=0; i<n; i++){
             st = new StringTokenizer(br.readLine());
             arr[i]=Integer.parseInt(st.nextToken());
         }
-
-        for(int i=0; i<n; i++){
-            boolean[] visited = new boolean[n];
-            visited[i]=true;
-            dfs(1,arr[i],visited);
-        }
+        dfs(0,0,0);
         System.out.println(cnt);
     }
-    public static void dfs(int depth,int total, boolean[] visited){
-        if(cnt<depth) cnt=depth;
+    public static void dfs(int depth,int total, int count){
+        if(cnt<count) cnt=count;
         if(depth==n) return;
         for(int i=0; i<n; i++){
-            if(visited[i]) continue;
             if(isCarry(total,arr[i])) continue;
-            visited[i]=true;
-            dfs(depth+1,total+arr[i],visited);
-            visited[i]=false;
+            dfs(depth+1,total+arr[i],count+1);
         }
     }
 
-     public static boolean isCarry(int sum, int target){
+    public static boolean isCarry(int sum, int target){
         while (sum > 0 || target > 0) {
             int num1 = sum % 10;
             int num2 = target % 10;
