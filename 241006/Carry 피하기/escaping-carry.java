@@ -25,7 +25,7 @@ public class Main {
         if(depth==n) return;
         for(int i=depth; i<n; i++){
             if(isCarry(total,arr[i])) continue;
-            dfs(depth+1,total+arr[i],count+1);
+            dfs(i+1,total+arr[i],count+1);
         }
     }
 
