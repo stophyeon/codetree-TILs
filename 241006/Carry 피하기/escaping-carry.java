@@ -23,7 +23,7 @@ public class Main {
     public static void dfs(int depth,int total, int count){
         if(cnt<count) cnt=count;
         if(depth==n) return;
-        for(int i=0; i<n; i++){
+        for(int i=depth; i<n; i++){
             if(isCarry(total,arr[i])) continue;
             dfs(depth+1,total+arr[i],count+1);
         }
