@@ -30,7 +30,7 @@ public class Main {
         
         for(int i=0; i<n; i++){
             if(visited[i]) continue;
-            if(!isCarry(total,arr[i])) continue;
+            if(isCarry(total,arr[i])) continue;
             visited[i]=true;
             dfs(depth+1,total+arr[i],visited);
             visited[i]=false;
@@ -38,12 +38,14 @@ public class Main {
         if(cnt<depth) cnt=depth;
     }
 
-    public static boolean isCarry(int n1, int n2){
-        String[] num1 = String.valueOf(n1).split("");
-        String[] num2 = String.valueOf(n2).split("");
-        for(int i=0; i<Math.min(num1.length,num2.length); i++){
-            if(Integer.parseInt(num1[num1.length-i-1])+Integer.parseInt(num2[num2.length-i-1])>=10) return false;
+     public static boolean isCarry(int sum, int target){
+        while (sum > 0 || target > 0) {
+            int num1 = sum % 10;
+            int num2 = target % 10;
+            if (num1 + num2 >= 10) return true;
+            sum /= 10;
+            target /= 10;
         }
-        return true;
+        return false;
     }
 }
