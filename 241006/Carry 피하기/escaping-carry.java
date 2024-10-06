@@ -27,7 +27,8 @@ public class Main {
         System.out.println(cnt);
     }
     public static void dfs(int depth,int total, boolean[] visited){
-        if(depth==n) cnt=Math.max(cnt,depth);
+        if(cnt<depth) cnt=depth;
+        if(depth==n) return;
         for(int i=0; i<n; i++){
             if(visited[i]) continue;
             if(isCarry(total,arr[i])) continue;
@@ -35,7 +36,6 @@ public class Main {
             dfs(depth+1,total+arr[i],visited);
             visited[i]=false;
         }
-        if(cnt<depth) cnt=depth;
     }
 
      public static boolean isCarry(int sum, int target){
