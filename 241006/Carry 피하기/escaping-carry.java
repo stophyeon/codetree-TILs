@@ -41,8 +41,7 @@ public class Main {
     public static boolean isCarry(int n1, int n2){
         String[] num1 = String.valueOf(n1).split("");
         String[] num2 = String.valueOf(n2).split("");
-        int min = Math.min(num1.length,num2.length);
-        for(int i=0; i<min; i++){
+        for(int i=0; i<Math.min(num1.length,num2.length); i++){
             if(Integer.parseInt(num1[num1.length-i-1])+Integer.parseInt(num2[num2.length-i-1])>=10) return false;
         }
         return true;
