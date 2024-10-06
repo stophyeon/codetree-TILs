@@ -30,11 +30,10 @@ public class Main {
         
         for(int i=0; i<n; i++){
             if(visited[i]) continue;
-            if(isCarry(total,arr[i])){
-                visited[i]=true;
-                dfs(depth+1,total+arr[i],visited);
-                visited[i]=false;
-            }
+            if(!isCarry(total,arr[i])) continue;
+            visited[i]=true;
+            dfs(depth+1,total+arr[i],visited);
+            visited[i]=false;
         }
         if(cnt<depth) cnt=depth;
     }
