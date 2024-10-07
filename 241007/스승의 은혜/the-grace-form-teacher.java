@@ -19,12 +19,7 @@ public class Main {
             si= Integer.parseInt(st.nextToken());
             gift.add(new int[]{pi,si});
         }
-        gift.sort((g1, g2) -> {
-            if (g1[0] > g1[1]) {
-                return g1[0] - g2[0];
-            }
-            return g1[1] - g2[1];
-        });
+        gift.sort(Comparator.comparingInt(g -> g[2]));
 //        for(int[] g : gift){
 //            System.out.print(g[0]);
 //            System.out.print(",");
