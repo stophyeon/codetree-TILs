@@ -17,7 +17,8 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             pi= Integer.parseInt(st.nextToken());
             si= Integer.parseInt(st.nextToken());
-            gift.add(new int[]{pi,si});
+            if(pi>si) gift.add(new int[]{pi,si,pi});
+            else{gift.add(new int[]{pi,si,si});}
         }
         gift.sort(Comparator.comparingInt(g -> g[2]));
 //        for(int[] g : gift){
