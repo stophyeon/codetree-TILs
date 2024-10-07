@@ -8,8 +8,8 @@ public class Main {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
         int n = Integer.parseInt(st.nextToken());
-        int num=100;
-        int[][] map =new int[201][201];
+        int num=200;
+        int[][] map =new int[401][401];
         int x1,y1,x2,y2=0;
         int total=0;
         for(int i=0; i<n; i++){
