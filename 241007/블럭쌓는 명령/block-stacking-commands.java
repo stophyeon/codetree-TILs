@@ -29,6 +29,6 @@ public class Main {
             m[i]= total;
         }
         Arrays.sort(m);
-        System.out.print(m[n/2]);
+        System.out.print(m[(n/2)+1]);
     }
 }
