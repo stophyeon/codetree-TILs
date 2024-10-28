@@ -21,8 +21,8 @@ public class Main {
         visited[0][0]=true;
         visited[4][4]=true;
         dfsA(visited,0,0,4,4,2);
-        dfsB(visited,0,0,4,4,2);
-        System.out.println(answer/2);
+        //dfsB(visited,0,0,4,4,2);
+        System.out.println(answer);
     }
     public static void dfsA(boolean[][] visited,int r1, int c1,int r2, int c2, int cnt){
         //System.out.printf("A : %d,%d B: %d,%d ",r1,c1,r2,c2);
@@ -35,9 +35,8 @@ public class Main {
             if(visited[nr][nc]){
                 if(r2==nr && c2==nc){
                     if(cnt==25-k) answer++;
-                    return;
                 }
-                else{continue;}
+                continue;
             }
             visited[nr][nc]=true;
             dfsB(visited,nr,nc,r2,c2,cnt+1);
@@ -55,9 +54,8 @@ public class Main {
             if(visited[nr][nc]){
                 if(r1==nr && c1==nc){
                     if(cnt==25-k) answer++;
-                    return;
                 }
-                else{continue;}
+                continue;
             }
             visited[nr][nc]=true;
             dfsA(visited,r1,c1,nr,nc,cnt+1);
