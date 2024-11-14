@@ -30,10 +30,11 @@ public class Main {
     static int[][] map;
     static int[][][] wall;
     static int[][] point;
+    static int n;
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
+        n = Integer.parseInt(st.nextToken());
         int m = Integer.parseInt(st.nextToken());
         int f = Integer.parseInt(st.nextToken());
         map = new int[n][n];
@@ -180,10 +181,10 @@ public class Main {
     }
 
     public static void movePoint(int t){
-
         for(int[] p : point){
             if(t%p[3]==0){
-                if(map[p[0]+dr[p[2]]][p[1]+dc[p[2]]]==1) continue;
+                if(!inRange(p[0]+dr[p[2]],p[1]+dc[p[2]],n)) continue;
+                if(map[p[0]+dr[p[2]]][p[1]+dc[p[2]]]==1||map[p[0]+dr[p[2]]][p[1]+dc[p[2]]]==4) continue;
                 map[p[0]+dr[p[2]]][p[1]+dc[p[2]]]=1;
                 p[0]=p[0]+dr[p[2]];
                 p[1]=p[1]+dc[p[2]];
