@@ -1,3 +1,4 @@
+
 import  java.util.*;
 import  java.io.*;
 
@@ -73,7 +74,7 @@ public class Main {
             int c = Integer.parseInt(st.nextToken());
             int d = Integer.parseInt(st.nextToken());
             int v = Integer.parseInt(st.nextToken());
-            map[r][c]=1;
+
             point[i]=new int[]{r,c,d,v};
         }
         //System.out.println(sr);
@@ -88,22 +89,27 @@ public class Main {
             for(int j=0;j<n; j++){
                 if(map[i][j]==3){
                     for(int k=0; k<4; k++){
-                        if(map[i+dr[k]][i+dc[k]]==0){
+                        if(map[i+dr[k]][j+dc[k]]==0){
                             er=i;
                             ec=j;
                             ed=k;
                             ssr=i+dr[k];
                             ssc=j+dc[k];
+                            break;
                         }
                     }
                 }
             }
         }
-
+        int ans=-1;
+        //System.out.println(ed);
         if(ed==0) wall[ed][m-1][wr+m-1-er]=4;
-        if(ed==1) wall[ed][m-1][er-wr]=4;
-        if(ed==2) wall[ed][m-1][ec-wc]=4;
-        if(ed==3) wall[ed][m-1][wc+m-1-ec]=4;
+        else if(ed==1) wall[ed][m-1][er-wr]=4;
+        else if(ed==2) wall[ed][m-1][ec-wc]=4;
+        else{ wall[ed][m-1][wc+m-1-ec]=4;}
+        for(int[] p:point){
+            map[p[0]][p[1]]=1;
+        }
         //정육면체 탈출
         int answer=1;
         boolean[][][] visited = new boolean[5][m][m];
@@ -146,7 +152,7 @@ public class Main {
         while(!q1.isEmpty()) {
             Node nd = q1.poll();
             if (map[nd.r][nd.c] == 4) {
-                System.out.println(nd.cost+1);
+                ans=nd.cost+1;
                 break;
             }
             if(!vs[nd.cost+1]) movePoint(nd.cost+1);
@@ -163,7 +169,14 @@ public class Main {
                 visit[nr][nc] = true;
             }
         }
-        
+        System.out.println(ans);
+//        for(int i=0; i<n; i++){
+//            for(int j=0; j<n; j++){
+//                System.out.print(map[i][j]);
+//                System.out.print(" ");
+//            }
+//            System.out.println();
+//        }
     }
 
     public static void movePoint(int t){
