@@ -69,6 +69,9 @@ public class Main {
                     else{
                         if(maxR.r+maxR.c==rabbit.r+ rabbit.c){
                             if(maxR.r==rabbit.r){
+                                if(maxR.c==rabbit.c){
+                                    if(maxR.num<rabbit.num) maxR=rabbit;
+                                }
                                 if(maxR.c<rabbit.c) maxR=rabbit;
                             }
                             else if(maxR.r<rabbit.r) maxR=rabbit;
