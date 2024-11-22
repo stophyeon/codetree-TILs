@@ -1,5 +1,6 @@
 
 
+
 import  java.util.*;
 import  java.io.*;
 
@@ -35,9 +36,9 @@ public class Main {
         return r1.cnt-r2.cnt;
     });
 
-    
+
     static HashMap<Integer, Rabbit> map = new HashMap<>();
-    static HashSet<Integer> jumped = new HashSet<>();
+    
     static int[] dr = {-1,1,0,0};
     static int[] dc = {0,0,-1,1};
     static int[] d= new int[2];
@@ -67,6 +68,7 @@ public class Main {
             if(type==200){
                 int k = Integer.parseInt(st.nextToken());
                 int s = Integer.parseInt(st.nextToken());
+                HashSet<Integer> jumped = new HashSet<>();
                 for(int j=0; j<k; j++){
                     Rabbit rabbit = jump.poll();
                     move(rabbit);
@@ -75,7 +77,7 @@ public class Main {
                     afterJump(rabbit.num, rabbit.r+ rabbit.c+2);
                 }
                 addScore(jumped,s);
-                jumped.clear();
+                
             }
             else if(type==300){
                 int t = Integer.parseInt(st.nextToken());
@@ -92,7 +94,7 @@ public class Main {
         }
 
     }
-    public static void addScore(HashSet<Integer> set, int s){
+    public static void addScore(HashSet<Integer> jumped, int s){
         int maxId=-1;
         Rabbit r1=null;
         for(int j : jumped){
