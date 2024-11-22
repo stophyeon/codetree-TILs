@@ -1,5 +1,3 @@
-
-
 import  java.util.*;
 import  java.io.*;
 
@@ -33,20 +31,7 @@ public class Main {
         }
         return r1.cnt-r2.cnt;
     });
-    static PriorityQueue<Rabbit> mr = new PriorityQueue<>((r1,r2)->{
-        if(r1.r+r1.c==r2.r+r2.c){
-            if(r1.r==r2.r){
-                if(r1.c==r2.c){
-                    return r2.num-r1.num;
-                }
-                return r2.c-r1.c;
-            }
-            return r2.r-r1.r;
-        }
-        return (r2.r+r2.c)-(r1.r+r1.c);
-    });
-    static int[][] dis = new int[4][2];
-    static int[] max = new int[4];
+    static Rabbit maxR;
     static HashMap<Integer, Rabbit> map = new HashMap<>();
     static int[] dr = {-1,1,0,0};
     static int[] dc = {0,0,-1,1};
@@ -76,17 +61,25 @@ public class Main {
             type = Integer.parseInt(st.nextToken());
             if(type==200){
                 int k = Integer.parseInt(st.nextToken());
-                int s = Integer.parseInt(st.nextToken());
-
+                long s = Integer.parseInt(st.nextToken());
                 for(int j=0; j<k; j++){
                     Rabbit rabbit = jump.poll();
                     move(rabbit);
-                    mr.add(rabbit);
+                    if(maxR==null) maxR=rabbit;
+                    else{
+                        if(maxR.r+maxR.c==rabbit.r+ rabbit.c){
+                            if(maxR.r==rabbit.r){
+                                if(maxR.c<rabbit.c) maxR=rabbit;
+                            }
+                            else if(maxR.r<rabbit.r) maxR=rabbit;
+                        }
+                        else if(maxR.r+maxR.c<rabbit.r+ rabbit.c) maxR=rabbit;
+                    }
                     jump.add(rabbit);
                     afterJump(rabbit.num, rabbit.r+ rabbit.c+2);
                 }
-                mr.poll().score+=s;
-                mr.clear();
+                maxR.score+=s;
+                maxR=null;
             }
             else if(type==300){
                 int t = Integer.parseInt(st.nextToken());
@@ -107,50 +100,36 @@ public class Main {
     public static void afterJump(int num,int rc){
         for(int k : map.keySet()){
             if(k==num) continue;
-            map.get(k).score+=rc;
+            map.get(k).score+=(long)rc;
         }
     }
 
     public static void move(Rabbit rabbit){
+        List<int[]> dis = new ArrayList<>();
         for(int i=0; i<4; i++){
             int nr = rabbit.r+dr[i]*rabbit.d;
             int nc = rabbit.c+dc[i]*rabbit.d;
             if (!inRange(nr,nc)){
                 reverse(rabbit.r, rabbit.c,rabbit.d,i);
-                dis[i]=d;
-                max[i]=dis[i][0]+dis[i][1];
+                dis.add(d);
             }
-            else{dis[i]=new int[]{nr,nc};max[i]=nr+nc;}
+            else{dis.add(new int[]{nr,nc});}
         }
-        int maxR =-1;
-        int maxC =-1;
-        for(int i=0; i<4; i++){
-            if(max[i]>maxR+maxC){
-                maxR=dis[i][0];
-                maxC=dis[i][1];
-
-            }
-            else if(max[i]==maxR+maxC){
-                if(maxR==dis[i][0]){
-                    if(maxC<dis[i][1]){
-                        maxR=dis[i][0];
-                        maxC=dis[i][1];
-                    }
-
+        dis.sort((d1,d2)->{
+            if(d1[0]+d1[1]==d2[0]+d1[1]){
+                if(d1[0]==d2[0]){
+                    return d2[1]-d1[1];
                 }
-                else if(maxR<dis[i][0]){
-                    maxR=dis[i][0];
-                    maxC=dis[i][1];
-                }
+                return d2[0]-d1[0];
             }
-        }
-        rabbit.r=maxR;
-        rabbit.c=maxC;
+            return (d2[0]+d2[1])-(d1[0]+d1[1]);
+        });
+        rabbit.r=dis.get(0)[0];
+        rabbit.c=dis.get(0)[1];
         rabbit.cnt++;
     }
 
     public static void reverse(int r, int c, int dis,int dir){
-
         // 상(r<0) 하(r>=n) 좌(c<0) 우(c>=m) 순
         if(dir==0){
             dis%=2*(n-1);
@@ -184,7 +163,6 @@ public class Main {
             else{c-=dis; dis=0;}
             d= new int[]{r,c+dis};
         }
-
     }
 
     public static boolean inRange(int r, int c){
