@@ -20,25 +20,26 @@ public class Main {
 
     static int n;
     static int m;
-    static PriorityQueue<Rabbit> jump = new PriorityQueue<>((r1,r2)->{
-        if (r1.cnt==r2.cnt){
-            if(r1.r+r1.c==r2.r+r2.c){
-                if(r1.r==r2.r){
-                    if(r1.c==r2.c){
-                        return r1.num-r2.num;
+    static HashMap<Integer, Rabbit> map = new HashMap<>();
+    static PriorityQueue<Integer> jump = new PriorityQueue<>((r1,r2)->{
+        if (map.get(r1).cnt==map.get(r2).cnt){
+            if(map.get(r1).r+map.get(r1).c==map.get(r2).r+map.get(r2).c){
+                if(map.get(r1).r==map.get(r2).r){
+                    if(map.get(r1).c==map.get(r2).c){
+                        return map.get(r1).num-map.get(r2).num;
                     }
-                    return r1.c-r2.c;
+                    return map.get(r1).c-map.get(r2).c;
                 }
-                return r1.r-r2.r;
+                return map.get(r1).r-map.get(r2).r;
             }
-            return (r1.r+r1.c)-(r2.r+r2.c);
+            return (map.get(r1).r+map.get(r1).c)-(map.get(r2).r+map.get(r2).c);
         }
-        return r1.cnt-r2.cnt;
+        return map.get(r1).cnt-map.get(r2).cnt;
     });
 
 
-    static HashMap<Integer, Rabbit> map = new HashMap<>();
-    
+
+
     static int[] dr = {-1,1,0,0};
     static int[] dc = {0,0,-1,1};
     static int[] d= new int[2];
@@ -58,9 +59,7 @@ public class Main {
             map.put(num,new Rabbit(num,d));
         }
 
-        for(int k : map.keySet()){
-            jump.add(map.get(k));
-        }
+        jump.addAll(map.keySet());
 
         for(int i=1; i<q; i++){
             st = new StringTokenizer(br.readLine());
@@ -70,14 +69,14 @@ public class Main {
                 int s = Integer.parseInt(st.nextToken());
                 HashSet<Integer> jumped = new HashSet<>();
                 for(int j=0; j<k; j++){
-                    Rabbit rabbit = jump.poll();
+                    Rabbit rabbit = map.get(jump.poll());
                     move(rabbit);
                     jumped.add(rabbit.num);
-                    jump.add(rabbit);
+                    jump.add(rabbit.num);
                     afterJump(rabbit.num, rabbit.r+ rabbit.c+2);
                 }
                 addScore(jumped,s);
-                
+
             }
             else if(type==300){
                 int t = Integer.parseInt(st.nextToken());
