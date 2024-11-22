@@ -45,6 +45,8 @@ public class Main {
         }
         return (r2.r+r2.c)-(r1.r+r1.c);
     });
+    static int[][] dis = new int[4][2];
+    static int[] max = new int[4];
     static HashMap<Integer, Rabbit> map = new HashMap<>();
     static int[] dr = {-1,1,0,0};
     static int[] dc = {0,0,-1,1};
@@ -110,13 +112,10 @@ public class Main {
     }
 
     public static void move(Rabbit rabbit){
-        int[][] dis = new int[4][2];
-        int[] max = new int[4];
         for(int i=0; i<4; i++){
             int nr = rabbit.r+dr[i]*rabbit.d;
             int nc = rabbit.c+dc[i]*rabbit.d;
             if (!inRange(nr,nc)){
-
                 reverse(rabbit.r, rabbit.c,rabbit.d,i);
                 dis[i]=d;
                 max[i]=dis[i][0]+dis[i][1];
