@@ -35,22 +35,11 @@ public class Main {
         }
         return r1.cnt-r2.cnt;
     });
-    static PriorityQueue<Rabbit> mr = new PriorityQueue<>((r1,r2)->{
-        if(r1.r+r1.c==r2.r+r2.c){
-            if(r1.r==r2.r){
-                if(r1.c==r2.c){
-                    return r2.num-r1.num;
-                }
-                return r2.c-r1.c;
-            }
-            return r2.r-r1.r;
-        }
-        return (r2.r+r2.c)-(r1.r+r1.c);
-    });
+
     static int[][] dis = new int[4][2];
     static int[] max = new int[4];
     static HashMap<Integer, Rabbit> map = new HashMap<>();
-    static HashSet<Integer> set = new HashSet<>();
+    static HashSet<Integer> jumped = new HashSet<>();
     static int[] dr = {-1,1,0,0};
     static int[] dc = {0,0,-1,1};
     static int[] d= new int[2];
@@ -80,20 +69,15 @@ public class Main {
             if(type==200){
                 int k = Integer.parseInt(st.nextToken());
                 int s = Integer.parseInt(st.nextToken());
-
                 for(int j=0; j<k; j++){
                     Rabbit rabbit = jump.poll();
                     move(rabbit);
-                    if(!set.contains(rabbit.num)){
-                        mr.add(rabbit);
-                        set.add(rabbit.num);
-                    }
+                    jumped.add(rabbit.num);
                     jump.add(rabbit);
                     afterJump(rabbit.num, rabbit.r+ rabbit.c+2);
                 }
-                mr.poll().score+=s;
-                mr.clear();
-                set.clear();
+                addScore(jumped,s);
+                jumped.clear();
             }
             else if(type==300){
                 int t = Integer.parseInt(st.nextToken());
@@ -109,6 +93,27 @@ public class Main {
             }
         }
 
+    }
+    public static void addScore(HashSet<Integer> set, int s){
+        int maxId=-1;
+        Rabbit r1=null;
+        for(int j : jumped){
+            Rabbit r2 = map.get(j);
+            if(r1==null) r1=r2;
+            else{
+                if(r1.r+r1.c==r2.r+r2.c){
+                    if(r1.r==r2.r){
+                        if(r1.c==r2.c){
+                            if(r1.num<r2.num) r1=r2;
+                        }
+                        else if(r1.c<r2.c) r1=r2;
+                    }
+                    else if(r1.r<r2.r) r1=r2;
+                }
+                else if(r1.r+r1.c<r2.r+r2.c) r1=r2;
+            }
+        }
+        r1.score+=s;
     }
 
     public static void afterJump(int num,int rc){
