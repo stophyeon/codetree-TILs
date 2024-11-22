@@ -116,6 +116,7 @@ public class Main {
             int nr = rabbit.r+dr[i]*rabbit.d;
             int nc = rabbit.c+dc[i]*rabbit.d;
             if (!inRange(nr,nc)){
+
                 reverse(rabbit.r, rabbit.c,rabbit.d,i);
                 dis[i]=d;
                 max[i]=dis[i][0]+dis[i][1];
@@ -153,18 +154,22 @@ public class Main {
 
         // 상(r<0) 하(r>=n) 좌(c<0) 우(c>=m) 순
         if(dir==0){
+            dis%=2*(n-1);
             if(r-dis<0) reverse(0,c,dis-r,1);
             else{d= new int[]{r-dis,c};}
         }
         else if(dir==1){
+            dis%=2*(n-1);
             if(r+dis>=n) reverse(n-1,c,dis-((n-1)-r),0);
             else{d= new int[]{r+dis,c};}
         }
         else if(dir==2){
+            dis%=2*(m-1);
             if(c-dis<0) reverse(r,0,dis-c,3);
             else{d= new int[]{r,c-dis};}
         }
         else{
+            dis%=2*(m-1);
             if(c+dis>=m) reverse(r,m-1,dis-((m-1)-c),2);
             else{d= new int[]{r,c+dis};}
         }
