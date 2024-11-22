@@ -1,6 +1,5 @@
 
 
-
 import  java.util.*;
 import  java.io.*;
 
@@ -36,8 +35,7 @@ public class Main {
         return r1.cnt-r2.cnt;
     });
 
-    static int[][] dis = new int[4][2];
-    static int[] max = new int[4];
+    
     static HashMap<Integer, Rabbit> map = new HashMap<>();
     static HashSet<Integer> jumped = new HashSet<>();
     static int[] dr = {-1,1,0,0};
@@ -124,6 +122,8 @@ public class Main {
     }
 
     public static void move(Rabbit rabbit){
+        int[][] dis = new int[4][2];
+        int[] max = new int[4];
         for(int i=0; i<4; i++){
             int nr = rabbit.r+dr[i]*rabbit.d;
             int nc = rabbit.c+dc[i]*rabbit.d;
