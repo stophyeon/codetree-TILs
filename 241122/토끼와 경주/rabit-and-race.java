@@ -1,3 +1,5 @@
+
+
 import  java.util.*;
 import  java.io.*;
 
@@ -62,27 +64,27 @@ public class Main {
             if(type==200){
                 int k = Integer.parseInt(st.nextToken());
                 int s = Integer.parseInt(st.nextToken());
-                List<Integer> mr = new ArrayList<>();
+                PriorityQueue<Rabbit> mr = new PriorityQueue<>((r1,r2)->{
+                    if(r1.r+r1.c==r2.r+r2.c){
+                        if(r1.r==r2.r){
+                            if(r1.c==r2.c){
+                                return r2.num-r1.num;
+                            }
+                            return r2.c-r1.c;
+                        }
+                        return r2.r-r1.r;
+                    }
+                    return (r2.r+r2.c)-(r1.r+r1.c);
+                });
                 for(int j=0; j<k; j++){
                     Rabbit rabbit = jump.poll();
                     move(rabbit);
-                    mr.add(rabbit.num);
+                    mr.add(rabbit);
                     jump.add(rabbit);
                     afterJump(rabbit.num, rabbit.r+ rabbit.c+2);
                 }
-                mr.sort((r1,r2)->{
-                    if(map.get(r1).r+map.get(r1).c==map.get(r2).r+map.get(r2).c){
-                        if(map.get(r1).r==map.get(r2).r){
-                            if(map.get(r1).c==map.get(r2).c){
-                                return map.get(r2).num-map.get(r1).num;
-                            }
-                            return map.get(r2).c-map.get(r1).c;
-                        }
-                        return map.get(r2).r-map.get(r1).r;
-                    }
-                    return (map.get(r2).r+map.get(r2).c)-(map.get(r1).r+map.get(r1).c);
-                });
-                map.get(mr.get(0)).score+=s;
+                mr.poll().score+=s;
+                mr.clear();
             }
             else if(type==300){
                 int t = Integer.parseInt(st.nextToken());
