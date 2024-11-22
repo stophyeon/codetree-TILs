@@ -1,5 +1,3 @@
-
-
 import  java.util.*;
 import  java.io.*;
 
@@ -10,7 +8,7 @@ public class Main {
         int num;
         int d;
         int cnt=0;
-        int score=0;
+        long score=0;
         public Rabbit(int num,int d){
             this.num=num;
             this.d=d;
@@ -92,7 +90,7 @@ public class Main {
                 map.get(t).d*=l;
             }
             else{
-                int max=0;
+                long max=0;
                 for(int k : map.keySet()){
                     if(max<map.get(k).score) max=map.get(k).score;
                 }
