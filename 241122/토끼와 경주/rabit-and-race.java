@@ -154,23 +154,35 @@ public class Main {
         // 상(r<0) 하(r>=n) 좌(c<0) 우(c>=m) 순
         if(dir==0){
             dis%=2*(n-1);
-            if(r-dis<0) reverse(0,c,dis-r,1);
-            else{d= new int[]{r-dis,c};}
+            if(r-dis<0) {dis-=r;r=0;}
+            else{r-=dis; dis=0;}
+            if(dis>(n-1)-r){dis-=(n-1)-r;r=n-1;}
+            else{r+=dis; dis=0;}
+            d= new int[]{r-dis,c};
         }
         else if(dir==1){
             dis%=2*(n-1);
-            if(r+dis>=n) reverse(n-1,c,dis-((n-1)-r),0);
-            else{d= new int[]{r+dis,c};}
+            if(dis>(n-1)-r) {dis-=(n-1)-r; r=n-1;}
+            else{r+=dis; dis=0;}
+            if(r<dis){dis-=r;r=0;}
+            else{r-=dis; dis=0;}
+            d= new int[]{r+dis,c};
         }
         else if(dir==2){
             dis%=2*(m-1);
-            if(c-dis<0) reverse(r,0,dis-c,3);
-            else{d= new int[]{r,c-dis};}
+            if(c-dis<0) {dis-=c;c=0;}
+            else{c-=dis; dis=0;}
+            if(dis>(m-1)-c){dis-=(m-1)-c; c=m-1;}
+            else{c+=dis; dis=0;}
+            d= new int[]{r,c-dis};
         }
         else{
             dis%=2*(m-1);
-            if(c+dis>=m) reverse(r,m-1,dis-((m-1)-c),2);
-            else{d= new int[]{r,c+dis};}
+            if(dis>(m-1)-c) {dis-=(m-1)-c;c=m-1;}
+            else{c+=dis; dis=0;}
+            if(dis>c){dis-=c; c=0;}
+            else{c-=dis; dis=0;}
+            d= new int[]{r,c+dis};
         }
 
     }
