@@ -1,3 +1,5 @@
+
+
 import  java.util.*;
 import  java.io.*;
 
@@ -31,7 +33,18 @@ public class Main {
         }
         return r1.cnt-r2.cnt;
     });
-
+    static PriorityQueue<Rabbit> mr = new PriorityQueue<>((r1,r2)->{
+        if(r1.r+r1.c==r2.r+r2.c){
+            if(r1.r==r2.r){
+                if(r1.c==r2.c){
+                    return r2.num-r1.num;
+                }
+                return r2.c-r1.c;
+            }
+            return r2.r-r1.r;
+        }
+        return (r2.r+r2.c)-(r1.r+r1.c);
+    });
     static HashMap<Integer, Rabbit> map = new HashMap<>();
     static int[] dr = {-1,1,0,0};
     static int[] dc = {0,0,-1,1};
@@ -62,18 +75,7 @@ public class Main {
             if(type==200){
                 int k = Integer.parseInt(st.nextToken());
                 int s = Integer.parseInt(st.nextToken());
-                PriorityQueue<Rabbit> mr = new PriorityQueue<>((r1,r2)->{
-                    if(r1.r+r1.c==r2.r+r2.c){
-                        if(r1.r==r2.r){
-                            if(r1.c==r2.c){
-                                return r2.num-r1.num;
-                            }
-                            return r2.c-r1.c;
-                        }
-                        return r2.r-r1.r;
-                    }
-                    return (r2.r+r2.c)-(r1.r+r1.c);
-                });
+
                 for(int j=0; j<k; j++){
                     Rabbit rabbit = jump.poll();
                     move(rabbit);
