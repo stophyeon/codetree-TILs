@@ -14,11 +14,12 @@ public class Main {
 
     }
 
-    public static class Post{
+    public static class Post implements Comparable<Post>{
         int id;
         int rev;
         int dst;
         int cost;
+
         List<Integer> path = new ArrayList<>();
         public Post(int id, int rev,int dst,int cost){
             this.id=id;
@@ -26,15 +27,23 @@ public class Main {
             this.dst=dst;
             this.cost=cost;
         }
-        public int money(){
 
-            return (this.rev-this.cost);
+        public int money(){
+            return this.rev-this.cost;
+        }
+        @Override
+        public int compareTo(Post other) {
+            if (this.money() == other.money()) {
+                return Integer.compare(this.id, other.id);
+            }
+            return Integer.compare(other.money(), this.money());
         }
     }
     static int n;
     static int[] dist;
-    static HashMap<Integer, Post> posts = new HashMap<>();
     static int start=0;
+    static PriorityQueue<Post> pq = new PriorityQueue<>();
+    static boolean[] re;
     public static void main(String[] args) throws IOException{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -45,6 +54,7 @@ public class Main {
         int m=Integer.parseInt(st.nextToken());
         graph = new int[n][n];
         dist=new int[n];
+        re=new boolean[30001];
         for(int i=0; i<n; i++) {
             for (int j = 0; j < n; j++) {
                 graph[i][j]=max;
@@ -63,10 +73,10 @@ public class Main {
             type = Integer.parseInt(st.nextToken());
             if(type==200){
                 int id=Integer.parseInt(st.nextToken()); int rev=Integer.parseInt(st.nextToken()); int dest=Integer.parseInt(st.nextToken());
-                posts.put(id,new Post(id,rev,dest,dist[dest]));
+                pq.add(new Post(id,rev,dest,dist[dest]));
             }
             else if(type==300){
-                posts.remove(Integer.parseInt(st.nextToken()));
+                re[Integer.parseInt(st.nextToken())]=true;
             }
             else if(type==400){
                 sellPost();
@@ -74,9 +84,12 @@ public class Main {
             else{
                 start = Integer.parseInt(st.nextToken());
                 dijkstra();
-                for(int k : posts.keySet()){
-                    posts.compute(k, (key, p) -> new Post(p.id, p.rev, p.dst, dist[p.dst]));
+                List<Post> list =new ArrayList<>();
+                while(!pq.isEmpty()){
+                    Post p = pq.poll();
+                    list.add(new Post(p.id,p.rev,p.dst,dist[p.dst]));
                 }
+                pq.addAll(list);
             }
         }
     }
@@ -102,21 +115,19 @@ public class Main {
     }
 
     public static void sellPost(){
-        List<Integer> key =  new ArrayList<>(posts.keySet());
-        if(key.isEmpty()) {System.out.println(-1);return;}
-        key.sort((k1,k2)->{
-            if(posts.get(k1).money()==posts.get(k2).money()){
-                return posts.get(k1).id-posts.get(k2).id;
+        while (!pq.isEmpty()) {
+            Post p = pq.peek();
+            if (p.money() < 0) {
+                break;
             }
-            else if(posts.get(k1).money()<0&&posts.get(k2).money()>0) return 1;
-            else if(posts.get(k1).money()>0&&posts.get(k2).money()<0) return -1;
-            else if(posts.get(k1).money()<0&&posts.get(k2).money()<0) return Math.abs(posts.get(k1).money())-Math.abs(posts.get(k2).money());
-            else{return posts.get(k2).money()-posts.get(k1).money();}
-        });
-        if(posts.get(key.get(0)).rev<posts.get(key.get(0)).cost) System.out.println(-1);
-        else{System.out.println(posts.get(key.get(0)).id); posts.remove(key.get(0));}
+            pq.poll();
+            if (!re[p.id]) {
+                System.out.println( p.id);
+                return;
+            }
+        }
+        System.out.println(-1);
     }
-
 }
 
 
