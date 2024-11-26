@@ -57,20 +57,13 @@ public class Main {
             graph[v][u]=Math.min(graph[v][u],w);
             graph[u][v]=Math.min(graph[u][v],w);
         }
-//        for(int i=0; i<n; i++){
-//            for(int j=0; j<n; j++){
-//                for(int k : graph[i][j]){
-//                    System.out.printf("%d -> %d : %d\n",i,j,k);
-//                }
-//            }
-//        }
-        //System.out.printf("%d -> %d : %d",start,3,calculateDistance(3));
         dijkstra();
         for(int i=1; i<q; i++){
             st = new StringTokenizer(br.readLine());
             type = Integer.parseInt(st.nextToken());
             if(type==200){
-                producePost(Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()),Integer.parseInt(st.nextToken()));
+                int id=Integer.parseInt(st.nextToken()); int rev=Integer.parseInt(st.nextToken()); int dest=Integer.parseInt(st.nextToken());
+                posts.put(id,new Post(id,rev,dest,dist[dest]));
             }
             else if(type==300){
                 posts.remove(Integer.parseInt(st.nextToken()));
@@ -79,9 +72,12 @@ public class Main {
                 sellPost();
             }
             else{
-                changeStart(Integer.parseInt(st.nextToken()));
+                start = Integer.parseInt(st.nextToken());
+                dijkstra();
+                for(int k : posts.keySet()){
+                    posts.compute(k, (key, p) -> new Post(p.id, p.rev, p.dst, dist[p.dst]));
+                }
             }
-
         }
     }
     static void dijkstra() {
@@ -104,9 +100,6 @@ public class Main {
             }
         }
     }
-    public static void producePost(int id, int rev, int dest){
-        posts.put(id,new Post(id,rev,dest,dist[dest]));
-    }
 
     public static void sellPost(){
         List<Integer> key =  new ArrayList<>(posts.keySet());
@@ -120,24 +113,10 @@ public class Main {
             else if(posts.get(k1).money()<0&&posts.get(k2).money()<0) return Math.abs(posts.get(k1).money())-Math.abs(posts.get(k2).money());
             else{return posts.get(k2).money()-posts.get(k1).money();}
         });
-//        for(int k : key){
-//            System.out.printf("%d : %d\n",k,posts.get(k).money());
-//        }
-        //System.out.printf("%d : %d\n",key.get(0),posts.get(key.get(0)).money());
-
         if(posts.get(key.get(0)).rev<posts.get(key.get(0)).cost) System.out.println(-1);
         else{System.out.println(posts.get(key.get(0)).id); posts.remove(key.get(0));}
     }
 
-    public static void changeStart(int s) {
-        //존재하는 상품 재 탐색
-        start = s;
-        dijkstra();
-        for(int k : posts.keySet()){
-            posts.compute(k, (key, p) -> new Post(p.id, p.rev, p.dst, dist[p.dst]));
-            //System.out.printf("%d %d\n",posts.get(k).id,posts.get(k).cost);
-        }
-    }
 }
 
 
