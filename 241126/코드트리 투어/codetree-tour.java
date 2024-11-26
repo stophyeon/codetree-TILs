@@ -1,6 +1,7 @@
 import  java.util.*;
 import  java.io.*;
 
+
 public class Main {
     static int max = Integer.MAX_VALUE;
     static int[][] graph;
@@ -13,7 +14,6 @@ public class Main {
         }
 
     }
-
     public static class Post{
         int id;
         int rev;
@@ -55,16 +55,9 @@ public class Main {
             int u= Integer.parseInt(st.nextToken());
             int w= Integer.parseInt(st.nextToken());
             graph[v][u]=Math.min(graph[v][u],w);
+            graph[u][v]=Math.min(graph[u][v],w);
         }
-//        for(int i=0; i<n; i++){
-//            for(int j=0; j<n; j++){
-//                for(int k : graph[i][j]){
-//                    System.out.printf("%d -> %d : %d\n",i,j,k);
-//                }
-//            }
-//        }
-        //System.out.printf("%d -> %d : %d",start,3,calculateDistance(3));
-        dijkstra();
+
         for(int i=1; i<q; i++){
             st = new StringTokenizer(br.readLine());
             type = Integer.parseInt(st.nextToken());
@@ -83,11 +76,11 @@ public class Main {
 
         }
     }
-    static void dijkstra() {
+    public static void dijkstra() {
         boolean[] visit = new boolean[n];
         Arrays.fill(dist, max);
         dist[start] = 0;
-        for (int i = 0; i < n - 1; i++) {
+        for (int i = 0; i < n-1; i++) {
             int v = 0, minDist = max;
             for (int j = 0; j < n; j++) {
                 if (!visit[j] && minDist > dist[j]) {
@@ -134,7 +127,6 @@ public class Main {
         dijkstra();
         for(int k : posts.keySet()){
             posts.compute(k, (key, p) -> new Post(p.id, p.rev, p.dst, dist[p.dst]));
-            //System.out.printf("%d %d\n",posts.get(k).id,posts.get(k).cost);
         }
     }
 }
