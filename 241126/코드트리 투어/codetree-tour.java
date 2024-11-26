@@ -1,3 +1,5 @@
+
+
 import  java.util.*;
 import  java.io.*;
 
@@ -88,17 +90,16 @@ public class Main {
     public static int calculateDistance(int d){
         int min=max;
         Queue<Node> q = new LinkedList<>();
-        boolean[][] visited = new boolean[n][n];
+        boolean[][][] visited = new boolean[n][n][10000];
         q.add(new Node(start,0));
-
         while(!q.isEmpty()){
             Node nd = q.poll();
             if(nd.n==d&&min>nd.cost) {min=nd.cost;}
             for(int i=0; i<n; i++){
-                for(int p : graph[nd.n][i]){
-                    if(p==0||visited[nd.n][i]) continue;
-                    q.add(new Node(i,nd.cost+p));
-                    visited[nd.n][i]=true;
+                for(int j=0; j<graph[nd.n][i].size(); j++){
+                    if(graph[nd.n][i].get(j)==0||visited[nd.n][i][j]) continue;
+                    q.add(new Node(i,nd.cost+graph[nd.n][i].get(j)));
+                    visited[nd.n][i][j]=true;
                 }
             }
         }
@@ -117,8 +118,10 @@ public class Main {
             else if(posts.get(k1).money()<0&&posts.get(k2).money()<0) return Math.abs(posts.get(k1).money())-Math.abs(posts.get(k2).money());
             else{return posts.get(k2).money()-posts.get(k1).money();}
         });
-
-        //System.out.println(posts.get(key.get(0)).money());
+//        for(int k : key){
+//            System.out.printf("%d : %d\n",k,posts.get(k).money());
+//        }
+        //System.out.printf("%d : %d\n",key.get(0),posts.get(key.get(0)).money());
 
         if(posts.get(key.get(0)).rev<posts.get(key.get(0)).cost) System.out.println(-1);
         else{System.out.println(posts.get(key.get(0)).id); posts.remove(key.get(0));}
