@@ -1,11 +1,9 @@
-
-
 import  java.util.*;
 import  java.io.*;
 
 public class Main {
     static int max = Integer.MAX_VALUE;
-    static List<Integer>[][] graph;
+    static int[][] graph;
     public static class Node{
         int cost;
         int n;
@@ -15,6 +13,7 @@ public class Main {
         }
 
     }
+
     public static class Post{
         int id;
         int rev;
@@ -33,6 +32,7 @@ public class Main {
         }
     }
     static int n;
+    static int[] dist;
     static HashMap<Integer, Post> posts = new HashMap<>();
     static int start=0;
     public static void main(String[] args) throws IOException{
@@ -43,18 +43,18 @@ public class Main {
         int type = Integer.parseInt(st.nextToken());
         n=Integer.parseInt(st.nextToken());
         int m=Integer.parseInt(st.nextToken());
-        graph = new ArrayList[n][n];
+        graph = new int[n][n];
+        dist=new int[n];
         for(int i=0; i<n; i++) {
             for (int j = 0; j < n; j++) {
-                graph[i][j]=new ArrayList<>();
+                graph[i][j]=max;
             }
         }
         for(int i=0; i<m; i++){
             int v= Integer.parseInt(st.nextToken());
             int u= Integer.parseInt(st.nextToken());
             int w= Integer.parseInt(st.nextToken());
-            graph[v][u].add(w);
-            graph[u][v].add(w);
+            graph[v][u]=Math.min(graph[v][u],w);
         }
 //        for(int i=0; i<n; i++){
 //            for(int j=0; j<n; j++){
@@ -64,6 +64,7 @@ public class Main {
 //            }
 //        }
         //System.out.printf("%d -> %d : %d",start,3,calculateDistance(3));
+        dijkstra();
         for(int i=1; i<q; i++){
             st = new StringTokenizer(br.readLine());
             type = Integer.parseInt(st.nextToken());
@@ -82,28 +83,28 @@ public class Main {
 
         }
     }
-    public static void producePost(int id, int rev, int dest){
-        //start부터 dest까지 최단거리 경로
-        int cost = calculateDistance(dest);
-        posts.put(id,new Post(id,rev,dest,cost));
-    }
-    public static int calculateDistance(int d){
-        int min=max;
-        Queue<Node> q = new LinkedList<>();
-        boolean[][][] visited = new boolean[n][n][10000];
-        q.add(new Node(start,0));
-        while(!q.isEmpty()){
-            Node nd = q.poll();
-            if(nd.n==d&&min>nd.cost) {min=nd.cost;}
-            for(int i=0; i<n; i++){
-                for(int j=0; j<graph[nd.n][i].size(); j++){
-                    if(graph[nd.n][i].get(j)==0||visited[nd.n][i][j]) continue;
-                    q.add(new Node(i,nd.cost+graph[nd.n][i].get(j)));
-                    visited[nd.n][i][j]=true;
+    static void dijkstra() {
+        boolean[] visit = new boolean[n];
+        Arrays.fill(dist, max);
+        dist[start] = 0;
+        for (int i = 0; i < n - 1; i++) {
+            int v = 0, minDist = max;
+            for (int j = 0; j < n; j++) {
+                if (!visit[j] && minDist > dist[j]) {
+                    v = j;
+                    minDist = dist[j];
+                }
+            }
+            visit[v] = true;
+            for (int j = 0; j < n; j++) {
+                if (!visit[j] && dist[v] != max && graph[v][j] != max && dist[j] > dist[v] + graph[v][j]) {
+                    dist[j] = dist[v] + graph[v][j];
                 }
             }
         }
-        return min;
+    }
+    public static void producePost(int id, int rev, int dest){
+        posts.put(id,new Post(id,rev,dest,dist[dest]));
     }
 
     public static void sellPost(){
@@ -127,18 +128,14 @@ public class Main {
         else{System.out.println(posts.get(key.get(0)).id); posts.remove(key.get(0));}
     }
 
-    public static void changeStart(int s){
+    public static void changeStart(int s) {
         //존재하는 상품 재 탐색
-        HashMap<Integer, Post> pt = new HashMap<>();
-        start=s;
+        start = s;
+        dijkstra();
         for(int k : posts.keySet()){
-            Post p = posts.get(k);
-            int c=calculateDistance(posts.get(k).dst);
-            pt.put(k,new Post(p.id,p.rev,p.dst,c));
+            posts.compute(k, (key, p) -> new Post(p.id, p.rev, p.dst, dist[p.dst]));
             //System.out.printf("%d %d\n",posts.get(k).id,posts.get(k).cost);
         }
-        posts.clear();
-        posts.putAll(pt);
     }
 }
 
