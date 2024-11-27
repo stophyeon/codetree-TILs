@@ -13,7 +13,7 @@ public class Main {
         }
     }
     public static class Golem{
-        int r=1;
+        int r=0;
         int c;
         int d;
         public Golem(int c,int d){
@@ -55,6 +55,7 @@ public class Main {
                     Arrays.fill(escape[i],false);
                 }
                 idx++;
+                System.out.println();
                 continue;
             }
             map[g.r][g.c]=idx;
@@ -62,15 +63,22 @@ public class Main {
                 if(i==g.d) escape[g.r+dr[i]][g.c+dc[i]]=true;
                 map[g.r+dr[i]][g.c+dc[i]]=idx;
             }
-            
+            //for(int i=0; i<=R; i++){
+            //    for(int j=0; j<=C; j++){
+            //        if(escape[i][j]) System.out.printf("%d,%d\n",i,j);
+            //    }
+            //}
+            //for(int i=1; i<=R; i++){
+            //    for(int j=1; j<=C; j++){
+            //        System.out.printf("%d ",map[i][j]);
+            //    }
+            //    System.out.println();
+            //}
+            //System.out.println();
             answer+=move(g.r,g.c,idx);
             idx++;
         }
-        //for(int i=0; i<=R; i++){
-        //    for(int j=0; j<=C; j++){
-        //        if(escape[i][j]) System.out.printf("%d,%d\n",i,j);
-        //    }
-        //}
+        
         System.out.println(answer);
     }
     public static boolean check(Golem g){
@@ -84,7 +92,6 @@ public class Main {
         }
         else {
             if(checkLeft(g.r,g.c)&&checkUnder(g.r,g.c-1)){
-                
                 g.r+=1;
                 g.c-=1;
                 g.d=(g.d+3)%4;
@@ -102,13 +109,17 @@ public class Main {
         }
     }
     public static boolean checkUnder(int r, int c){
-        
+        //System.out.printf("D- %d,%d\n",r,c);
         if(!(inRange(r+1,c-1)&&inRange(r+1,c+1)&&inRange(r+2,c))) return false;
         return map[r + 1][c - 1] == 0 && map[r + 1][c + 1] == 0 && map[r + 2][c] == 0;
     }
 
     public static boolean checkLeft(int r, int c){
-        if(r==1){
+        //System.out.printf("L- %d,%d\n",r,c);
+        if(r==0&&c>2){
+            return map[r+1][c]==0&&map[r+1][c-1]==0&&map[r+1][c-2]==0&&map[r+2][c-1]==0;
+        }
+        else if(r==1){
             if(!(inRange(r+1,c-1)&&inRange(r,c-2))) return false;
         }
         else{if(!(inRange(r+1,c-1)&&inRange(r-1,c-1)&&inRange(r,c-2))) return false;}
@@ -116,6 +127,10 @@ public class Main {
     }
 
     public static boolean checkRight(int r, int c){
+        //System.out.printf("R- %d,%d\n",r,c);
+        if(r==0&&c<C-1){
+            return map[r+1][c]==0&&map[r+1][c+1]==0&&map[r+1][c+2]==0&&map[r+2][c+1]==0;
+        }
         if(r==1){
             if(!(inRange(r+1,c+1)&&inRange(r,c+2))) return false;
         }
