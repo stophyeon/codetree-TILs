@@ -131,10 +131,10 @@ public class Main {
         if(r==0&&c<C-1){
             return map[r+1][c]==0&&map[r+1][c+1]==0&&map[r+1][c+2]==0&&map[r+2][c+1]==0;
         }
-        if(r==1){
+        else if(r==1){
             if(!(inRange(r+1,c+1)&&inRange(r,c+2))) return false;
         }
-        if(!(inRange(r+1,c+1)&&inRange(r-1,c+1)&&inRange(r,c+2))) return false;
+        else{if(!(inRange(r+1,c+1)&&inRange(r-1,c+1)&&inRange(r,c+2))) return false;}
         return map[r + 1][c + 1] == 0 && map[r - 1][c + 1] == 0 && map[r][c + 2] == 0;
     }
 
