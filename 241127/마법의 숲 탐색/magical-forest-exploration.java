@@ -55,7 +55,7 @@ public class Main {
                     Arrays.fill(escape[i],false);
                 }
                 idx++;
-                System.out.println();
+                //System.out.println();
                 continue;
             }
             map[g.r][g.c]=idx;
