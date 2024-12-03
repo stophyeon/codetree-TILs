@@ -88,7 +88,10 @@ public class Main {
                 visited[nr][nc]=true;
             }
         }
-
+        if (turn.isEmpty()) {
+            System.out.println(-1);
+            return;
+        }
         for (int i = 1; i < turn.size()-1; i++) {
 
             a=0;s=0;d=0;
