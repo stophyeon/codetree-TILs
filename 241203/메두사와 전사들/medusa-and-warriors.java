@@ -93,7 +93,6 @@ public class Main {
             return;
         }
         for (int i = 1; i < turn.size()-1; i++) {
-
             a=0;s=0;d=0;
             int[] loc = turn.get(i);
             for (Soldier s : soldiers) {
@@ -102,10 +101,19 @@ public class Main {
             //메두사 시선
             sight=makeStun(loc[0],loc[1]);
             //전사 이동
-            //System.out.println(soldiers[3].r+","+soldiers[3].c);
+
             move1(loc[0],loc[1]);
             move2(loc[0],loc[1]);
-            //System.out.println(soldiers[3].r+","+soldiers[3].c);
+//            for (int j=0; j<m; j++) {
+//                if(soldiers[j].dead)
+//                    System.out.println(j+" ");
+//            }
+//            for (int j=0; j<n; j++){
+//                for (int k=0; k<n; k++){
+//                    System.out.print(sight[j][k]+" ");
+//                }
+//                System.out.println();
+//            }
             System.out.printf("%d %d %d\n",d,s,a);
             for (Soldier s : soldiers) {
                 if(s.dead) continue;
@@ -266,6 +274,7 @@ public class Main {
             }
         }
         for (int i=0; i<soldiers.length; i++) {
+            if (soldiers[i].dead) continue;
             int nr=soldiers[i].r;
             int nc=soldiers[i].c;
             //System.out.println(nr+" "+nc+" ");
@@ -322,6 +331,7 @@ public class Main {
             }
         }
         for (int i=0; i<soldiers.length; i++) {
+            if (soldiers[i].dead) continue;
             int nr=soldiers[i].r;
             int nc=soldiers[i].c;
             if (map3[nr][nc]>=0&&map2[nr][nc]>0&&map4[2][nr][nc]==1) sd.add(i);
@@ -401,6 +411,7 @@ public class Main {
             }
         }
         for (int i=0; i<soldiers.length; i++) {
+            if (soldiers[i].dead) continue;
             int nr=soldiers[i].r;
             int nc=soldiers[i].c;
             if (map3[nr][nc]>=0&&map2[nr][nc]>0&&map4[0][nr][nc]==1) sd.add(i);
@@ -457,6 +468,7 @@ public class Main {
             }
         }
         for (int i=0; i<soldiers.length; i++) {
+            if (soldiers[i].dead) continue;
             int nr=soldiers[i].r;
             int nc=soldiers[i].c;
             if (map3[nr][nc]>=0&&map2[nr][nc]>0&&map4[1][nr][nc]==1) sd.add(i);
