@@ -65,16 +65,13 @@ public class Main {
 //        System.out.println();
 
         for (int i = 0; i < k; i++) {
+        	
             for(int j=1; j<=m; j++){
                 move(j,players[j]);
             }
-//            for (int r = 1; r <= n; r++) {
-//                for (int  c= 1; c <= n; c++) {
-//                    System.out.print(loc[r][c]+" ");
-//                }
-//                System.out.println();
-//            }
-//            System.out.println();
+            
+            
+            
         }
 
         for (int i = 1; i <= m; i++) {
@@ -89,6 +86,7 @@ public class Main {
             nr = p.r+dr[p.d];
             nc = p.c+dc[p.d];
         }
+        loc[p.r][p.c]=0;
         if(loc[nr][nc]!=0) fight(num,loc[nr][nc],nr,nc);
         else{
             getGun(p,nr,nc);
@@ -119,7 +117,7 @@ public class Main {
         //이동한 사람이 이김
         if (p1.score()>p2.score()){
             point[n1]+=p1.score()-p2.score();
-            loc[p1.r][p1.c]=0;
+            
             lose(p2,r,c,n2);
             win(p1,r,c,n1);
         }
@@ -132,7 +130,7 @@ public class Main {
         else{
             //이동한 사람이 이김
             if(p1.s>p2.s){
-                loc[p1.r][p1.c]=0;
+                
                 lose(p2,r,c,n2);
                 win(p1,r,c,n1);
             }
@@ -145,27 +143,29 @@ public class Main {
     }
     public static void win(Player p,int r, int c,int num){
         getGun(p,r,c);
-        //loc[p.r][p.c]=0;
+        
         loc[r][c]=num;
         p.r=r;
         p.c=c;
     }
     public static void lose(Player p, int r, int c,int num){
-        int temp = p.gun;
+    	map[r][c].add(p.gun);
         p.gun=0;
-        map[r][c].add(temp);
+        int dir = p.d;
+        
         for (int i=0; i<4; i++){
-            int nr = r+dr[p.d];
-            int nc = c+dc[p.d];
+            int nr = r+dr[dir];
+            int nc = c+dc[dir];
             if(!inRange(nr,nc)||loc[nr][nc]!=0){
-                p.d=(p.d+1)%4;
+                dir=(dir+1)%4;
                 continue;
             }
             getGun(p,nr,nc);
-            loc[p.r][p.c]=0;
+            
             loc[nr][nc]=num;
             p.r=nr;
             p.c=nc;
+            p.d=dir;
             break;
         }
     }
