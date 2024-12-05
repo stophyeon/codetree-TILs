@@ -34,6 +34,7 @@ public class Main {
     static List<int[]> store=new ArrayList<>();
     static List<int[]> bc=new ArrayList<>();
     static boolean[] arrive;
+    static boolean[][] useBc;
     static int[] dr = {-1,0,0,1};
     static int[] dc = {0,-1,1,0};
     public static void main(String[] args) throws IOException{
@@ -52,6 +53,7 @@ public class Main {
                 if(base[i][j]==1) bc.add(new int[] {i,j});
             }
         }
+        useBc = new boolean[n][n];
         for(int i=0; i<m; i++) {
             st = new StringTokenizer(br.readLine());
             int r=Integer.parseInt(st.nextToken())-1;
@@ -66,6 +68,11 @@ public class Main {
 //        }
         while(cnt!=m) {
             //격자안 사람이동
+
+//            for(int[] k : bc){
+//                System.out.printf("%d,%d -> %s\n",k[0],k[1],useBc[k[0]][k[1]]);
+//            }
+//            System.out.println();
             for(int k : person.keySet()) {
                 if(arrive[k]) continue;
                 Person p = person.get(k);
@@ -89,37 +96,35 @@ public class Main {
             if(time<=m) {
                 int[] s=store.get(time-1);
                 int min=Integer.MAX_VALUE;
-                int minIdx=0;
                 int minR=n;
                 int minC=n;
-                //System.out.printf("%d,%d -> ",s[0],s[1]);
+                //System.out.printf("%d : %d,%d\n",time,s[0],s[1]);
                 for(int i=0; i<bc.size(); i++) {
+                    if(useBc[bc.get(i)[0]][bc.get(i)[1]]) continue;
                     //System.out.printf("%d,%d -> %d,%d\n",s[0],s[1],bc.get(i)[0],bc.get(i)[1]);
                     int[] k=selectBC(s[0],s[1],bc.get(i)[0],bc.get(i)[1]);
+                    if(k[2]==0) continue;
                     //System.out.printf("%d,%d -> %d\n",k[0],k[1],k[2]);
                     if(k[2]<min) {
                         min=k[2];
                         minR=k[0];
                         minC=k[1];
-                        minIdx=i;
                     }
                     if(k[2]==min) {
                         if(k[0]<minR) {
                             minR=k[0];
                             minC=k[1];
-                            minIdx=i;
                         }
                         if(k[0]==minR) {
                             if(k[1]<minC) {
-
                                 minC=k[1];
-                                minIdx=i;
                             }
                         }
                     }
                 }
+                //System.out.printf("%d : %d, %d\n",time,minR,minC);
                 //System.out.printf("%d,%d\n",minR,minC);
-                bc.remove(minIdx);
+                useBc[minR][minC]=true;
                 person.put(time, new Person(minR,minC));
                 base[minR][minC]=-1;
             }
