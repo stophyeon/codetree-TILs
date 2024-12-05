@@ -56,12 +56,25 @@ public class Main {
             players[i]=new Player(r,c,d,s,0);
             loc[r][c]=i;
         }
-        
+//        for (int r = 1; r <= n; r++) {
+//            for (int  c= 1; c <= n; c++) {
+//                System.out.print(loc[r][c]+" ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
 
         for (int i = 0; i < k; i++) {
             for(int j=1; j<=m; j++){
                 move(j,players[j]);
             }
+//            for (int r = 1; r <= n; r++) {
+//                for (int  c= 1; c <= n; c++) {
+//                    System.out.print(loc[r][c]+" ");
+//                }
+//                System.out.println();
+//            }
+//            System.out.println();
         }
 
         for (int i = 1; i <= m; i++) {
@@ -98,10 +111,11 @@ public class Main {
     }
 
     public static void fight(int n1, int n2,int r, int c) {
-        //System.out.printf("%d vs %d\n",n1,n2);
+
         //p1은 아직 이동하지 않은 상태
         Player p1 = players[n1];
         Player p2 = players[n2];
+        //System.out.printf("%d: %d vs %d: %d\n",n1,p1.score(),n2,p2.score());
         //이동한 사람이 이김
         if (p1.score()>p2.score()){
             point[n1]+=p1.score()-p2.score();
@@ -112,7 +126,6 @@ public class Main {
         //원래 있던 사람이 이김
         else if (p1.score()<p2.score()){
             point[n2] += p2.score()-p1.score();
-
             lose(p1,r,c,n1);
             win(p2,r,c,n2);
         }
