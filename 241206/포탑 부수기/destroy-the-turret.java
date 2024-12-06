@@ -61,6 +61,7 @@ public class Main {
         int attack = n+m;
         for(int i=1;i<=k;i++) {
             //공격자 선정
+            if(maps.size()<=1) break;
             Pts wp=maps.get(chooseWeak());
             wp.turn=i;
             //강한 포탑 선정
@@ -93,7 +94,7 @@ public class Main {
         }
         System.out.println(maps.get(chooseStrong()).s);
     }
-    
+
     public static List<Integer> attack(Pts wp, Pts sp){
         List<Integer> path = new ArrayList<>();
         int[] ndr={-1,-1,-1,0,1,1,1,0};
