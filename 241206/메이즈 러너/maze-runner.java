@@ -22,6 +22,7 @@ public class Main {
     static int er;
     static int ec;
     static int total=0;
+    static int cnt=0;
     static int[][] map;
     //static int[][] loc;
     static Runner[] runners;
@@ -55,20 +56,21 @@ public class Main {
         er = Integer.parseInt(st.nextToken())-1;
         ec = Integer.parseInt(st.nextToken())-1;
         //loc[er][ec]=m+1;
-        int cnt=0;
+
 
         for(int i=0; i<k; i++) {
             //러너 이동
-            move();
 
+            move();
             //정사각형 범위 지정
+            if(cnt==m) break;
             int[] s=searchSquare();
             //System.out.println(s[0]+","+s[1]+" - "+s[2]);
             //범위에 포함되는 러너 탐색
             List<Integer> rs = searchRunner(s[0],s[1],s[2]);
             //회전
             turnSquare(s[0],s[1],s[2],rs);
-            if(cnt==m) break;
+
 //            for(int j=0; j<n; j++) {
 //                for(int h=0; h<n; h++) {
 //                    System.out.print(map[j][h]+" ");
@@ -80,7 +82,7 @@ public class Main {
 //                System.out.println(runners[j].idx+": "+runners[j].d);
 //            }
 //            System.out.println(total);
-//            System.out.println(er+","+ec);
+            //System.out.println(er+","+ec);
         }
         System.out.println(total);
         er+=1;
@@ -160,6 +162,7 @@ public class Main {
                 if(nr==er&&nc==ec) {
                     total++;
                     arrive[i]=true;
+                    cnt++;
                     break;
                 }
                 if(map[nr][nc]==0&&dis>Math.abs(nr-er)+Math.abs(nc-ec)){
