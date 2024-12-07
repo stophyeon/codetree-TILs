@@ -1,10 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class Main {
     static int l;
@@ -31,7 +28,7 @@ public class Main {
     }
     static Person[] ps;
     static boolean[] dead;
-    static List<Integer> res = new ArrayList<>();
+    static Set<Integer> res = new HashSet<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -130,6 +127,7 @@ public class Main {
         if(!inRange(nr,nc,ps[idx].h-1,ps[idx].w-1)||isWall(nr,nc,ps[idx].h,ps[idx].w)) {res.clear();return;}
         List<Integer> r = isPerson(nr,nc,ps[idx].h,ps[idx].w,idx);
         if(r.isEmpty()) return;
+        //System.out.println(r);
         res.addAll(r);
 
         for(int index:r) {
@@ -170,13 +168,13 @@ public class Main {
         return false;
     }
     public static List<Integer> isPerson(int r, int c, int h, int w,int idx){
-        List<Integer> rs = new ArrayList<>();
+        Set<Integer> rs = new HashSet<>();
         for(int i=r;i<r+h;i++){
             for(int j=c;j<c+w;j++){
                 if(loc[i][j]!=0&&loc[i][j]!=idx) rs.add(loc[i][j]);
             }
         }
-        return rs;
+        return new ArrayList<Integer>(rs);
     }
     public static boolean inRange(int r, int c, int h, int w){
         return r>=0&&r<l&&c>=0&&c<l&&r+h>=0&&r+h<l&&c+w>=0&&c+w<l;
