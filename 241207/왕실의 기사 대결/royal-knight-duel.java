@@ -29,6 +29,7 @@ public class Main {
     static Person[] ps;
     static boolean[] dead;
     static Set<Integer> res = new HashSet<>();
+    static boolean can;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -61,14 +62,14 @@ public class Main {
         }
 
         for(int i=0;i<q;i++) {
-
+            can=true;
             st = new StringTokenizer(br.readLine());
             int idx = Integer.parseInt(st.nextToken());
             int d = Integer.parseInt(st.nextToken());
             res.clear();
 
             move(idx,d);
-            if(res.isEmpty()) continue;
+            if(!can) continue;
             res.add(idx);
             //System.out.println(res);
             checkMove(d);
@@ -81,11 +82,12 @@ public class Main {
 //            }
 //            System.out.println();
 //            for(int s=1; s<ps.length;s++) {
-//                if(dead[i]) continue;
+//                if(dead[s]) continue;
 //                System.out.printf("%d - %d\n",s,ps[s].dmg);
 //            }
 //            System.out.println();
         }
+
         for(int i=1; i<ps.length;i++) {
             if(dead[i]) continue;
             //System.out.printf("%d - %d\n",i,ps[i].dmg);
@@ -124,7 +126,7 @@ public class Main {
         if(dead[idx]) return;
         int nr=ps[idx].r+dr[d];
         int nc=ps[idx].c+dc[d];
-        if(!inRange(nr,nc,ps[idx].h-1,ps[idx].w-1)||isWall(nr,nc,ps[idx].h,ps[idx].w)) {res.clear();return;}
+        if(!inRange(nr,nc,ps[idx].h-1,ps[idx].w-1)||isWall(nr,nc,ps[idx].h,ps[idx].w)) {res.clear();can=false;return;}
         List<Integer> r = isPerson(nr,nc,ps[idx].h,ps[idx].w,idx);
         if(r.isEmpty()) return;
         //System.out.println(r);
