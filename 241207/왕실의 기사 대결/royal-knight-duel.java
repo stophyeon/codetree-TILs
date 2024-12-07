@@ -97,7 +97,7 @@ public class Main {
     }
     public static void checkMove(int d) {
         for(int i : res){
-            if(dead[idx]) continue;
+            if(dead[i]) continue;
             int h = ps[i].h;
             int w = ps[i].w;
             int r = ps[i].r;
@@ -110,7 +110,7 @@ public class Main {
         }
 
         for(int i : res) {
-            if(dead[idx]) continue;
+            if(dead[i]) continue;
             int h = ps[i].h;
             int w = ps[i].w;
             int nr = ps[i].r+dr[d];
